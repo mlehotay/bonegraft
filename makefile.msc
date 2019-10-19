@@ -1,0 +1,55 @@
+# CVS $Id: makefile.msc,v 1.3 2005/06/23 20:35:09 Michael Exp $
+# Copyright (c) Michael Lehotay, 2005.
+# Bone Graft may be freely redistributed. See license.txt for details.
+
+# NMAKE Makefile for VC98
+
+CFLAGS = /nologo /O2 /W4
+LDFLAGS = /nologo /incremental:no /warn:3
+LDLIBS =
+
+###############################################################################
+# rules
+
+all: graft guess
+graft: graft.exe
+guess: guess.exe
+
+# executables
+graft.exe: graft.obj getopt.obj bread.obj bprint.obj file.obj
+	@link /out:$@ $(LDFLAGS) $** $(LDLIBS)
+
+guess.exe: guess.obj
+	@link /out:$@ $(LDFLAGS) $** $(LDLIBS)
+
+# header files
+graft.obj: graft.h file.h getopt.h
+getopt.obj: getopt.h
+bread.obj: graft.h bones.h file.h
+bprint.obj: graft.h bones.h
+file.obj: file.h graft.h
+guess.obj:
+
+# implicit rule for ansi source files
+.c.obj:
+	@$(CC) /c $(CFLAGS) /Za $<
+
+# explicit rules for non-ansi source files
+guess.obj: guess.c
+	@$(CC) /c $(CFLAGS) $**
+
+
+###############################################################################
+# housekeeping
+
+spotless : clean
+	@if exist graft.exe del graft.exe
+	@if exist guess.exe del guess.exe
+
+clean:
+	@if exist graft.obj del graft.obj
+	@if exist getopt.obj del getopt.obj
+	@if exist bread.obj del bread.obj
+	@if exist bprint.obj del bprint.obj
+	@if exist file.obj del file.obj
+	@if exist guess.obj del guess.obj

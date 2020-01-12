@@ -6,7 +6,7 @@
 #define GRAFT_H
 
 /* most recent version of NetHack we know about */
-#define LATEST_VERSION 0x03040300
+#define LATEST_VERSION 0x03060200
 
 /* exit codes */
 #define SYSTEM_ERROR   1
@@ -16,10 +16,12 @@
 typedef enum {FALSE, TRUE} boolean;
 typedef char int8;
 typedef short int16;
-typedef long int32;
+typedef int int32;
+typedef long int64;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
-typedef unsigned long uint32;
+typedef unsigned int uint32;
+typedef unsigned long uint64;
 
 /* graft.c */
 void *alloc(unsigned len);

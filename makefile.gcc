@@ -15,15 +15,14 @@ CC = gcc
 OBJECTS = graft.o bread.o bprint.o file.o
 
 .PHONY: all graft guess
-all: graft guess
-graft: graft.exe
-guess: guess.exe
+# all: graft guess
+all: graft
 
 # executables
-graft.exe : $(OBJECTS)
+graft : $(OBJECTS)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-guess.exe : guess.o
+guess : guess.o
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 # header files
@@ -47,7 +46,7 @@ guess.o : guess.c
 .PHONY: spotless clean
 
 spotless : clean
-	@rm -f graft.exe guess.exe
+	@rm -f graft guess
 
 clean:
 	@rm -f $(OBJECTS) guess.o

@@ -242,7 +242,8 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
 void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
     uint8 buf1;
     uint16 buf2;
-    uint32 buf4, val=0;
+    uint32 buf4;
+    uint64 buf8, val=0;
 
     assert(buf != NULL);
     assert(buflen==1 || buflen==2 || buflen==4);
@@ -266,6 +267,18 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
 	    buf4 = (((buf4>>24)&0xff) | ((buf4&0xff)<<24) |
 		((buf4>>8)&0xff00) | ((buf4&0xff00)<<8));
 	val = buf4;
+    break;
+    case 8:
+	zread(&buf8, 8, 1, st);
+    if(switchbytes) {
+        /* (uint64)(ChangeEndianness32(value & 0xffffffff)) << 32 |
+                            ChangeEndianness32(value >> 32); */
+        buf8 = (((buf8>>56)&0xff) | ((buf8&0xff)<<56) |
+        ((buf8>>40)&0xff00) | ((buf8&0xff00)<<40) |
+        ((buf8>>24)&0xff0000) | ((buf8&0xff0000)<<24) |
+        ((buf8>>8)&0xff000000) | ((buf8&0xff000000)<<8));
+    }
+	val = buf8;
     }
 
     switch(buflen) {
@@ -276,8 +289,10 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
 	*((uint16 *) buf) = (uint16) val;
 	break;
     case 4:
-	*((uint32 *) buf) = val;
+	*((uint32 *) buf) = (uint32) val;
 	break;
+    case 8:
+    *((uint64 *) buf) = (uint64) val;
     }
 }
 

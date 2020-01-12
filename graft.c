@@ -61,12 +61,12 @@ void bail(int status, char *message, ... ) {
 	    fprintf(stderr, "Ahh! The bugs! Get them off!\n");
 	else {
 	    va_list args;
-	    
+
 	    assert(*message != '\0');
 	    assert(*message != '%'); /* don't mess with printf specifiers */
 	    srand(time(NULL));
-	    
-	    va_start(args, message);	
+
+	    va_start(args, message);
 	    fprintf(stderr, "%s %c", exclaim[rand() % (sizeof(exclaim) /
 		sizeof(exclaim[0]))], toupper(*(message++)));
 	    vfprintf(stderr, message, args);
@@ -199,7 +199,7 @@ static int readarg(char *arg, char opt) {
 	    bail(USAGE_ERROR, "non-numeric argument to -%c option", opt);
     }
 
-    /* check for unexpected values */    
+    /* check for unexpected values */
     i = atoi(optarg);
     if(i!=1 && i!=2 && i!=4)
 	bail(USAGE_ERROR, "-%c argument must be 1, 2 or 4", opt);

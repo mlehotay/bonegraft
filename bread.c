@@ -105,7 +105,7 @@ void readbones(char *fname) {
     bones.buriedobjs = readobjects(FALSE);
     bones.billobjs = readobjects(FALSE);
     readengravings();
-    
+
     if(bones.header.incarnation < 0x03030000) {
 	readrooms();
 	readdoors();
@@ -567,7 +567,7 @@ static struct mkroom *readroom(void) {
 
     r = alloc(sizeof(struct mkroom));
     r->resident = NULL;
-    r->nsubrooms = 0;   
+    r->nsubrooms = 0;
 
     st = startstruct(NULL, FALSE, pointersz);
     iread(&r->lx, sizeof(r->lx), CHARSZ, st);
@@ -625,7 +625,7 @@ static void readrooms(void) {
 
     iread(&bones.nroom, sizeof(bones.nroom), intsz, NULL);
     if(bones.nroom > MAXNROFROOMS+1) { /* the +1 is for a vault, I think */
-	bones.nroom = 0;    
+	bones.nroom = 0;
 	bail(SEMANTIC_ERROR, "too many rooms");
     }
 
@@ -842,7 +842,7 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     iread(&m->weapon_check, sizeof(m->weapon_check), CHARSZ, st);
     iread(&m->mnamelth, sizeof(m->mnamelth), CHARSZ, st);
     iread(&m->mxlth, sizeof(m->mxlth), SHORTSZ, st);
-    
+
     if(m->mnamelth+m->mxlth != xl)
 	bail(SEMANTIC_ERROR, "bogus mextra byte count");
 
@@ -889,12 +889,12 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     /* read in mextra, value is unimportant, it was just a placeholder */
     iread(&m->mextra[0], sizeof(m->mextra[0]), LONGSZ, st);
     endstruct(st);
-    
+
     if(hasinventory && readinv)
 	m->minvent = readobjects(FALSE);
     if(hasweapon && readinv)
 	xl = xl; /* lookup pointer from object chain */
-    
+
     return m;
 }
 
@@ -967,18 +967,18 @@ static void structsizes(void) {
     p = readdog();
     edogsz = getcount();
     free(p);
-    
+
     startcount();
     p = readmonster(0, FALSE);
     monstsz = getcount();
     freemonsters(p);
-    
+
     if(bones.header.incarnation >= 0x03020100) {
 	unsigned objsz;
-	
+
 	if(monstsz != bones.monstsz)
 	    bail(SEMANTIC_ERROR, "struct monst is wrong size");
-	
+
 	startcount();
 	p = readobjects(TRUE);
 	objsz = getcount();
@@ -1167,7 +1167,7 @@ static struct obj *readobjects(boolean counting) {
 	struct_t *st;
 	boolean hascontents = FALSE;
 	uint32 grot;
-	
+
 	iread(&xl, sizeof(xl), intsz, NULL);
 	if(xl == -1)
 	    break;
@@ -1272,7 +1272,7 @@ static struct obj *readobjects(boolean counting) {
 	    } else
 		bail(SEMANTIC_ERROR, "unexpected oxlth");
 	}
-	
+
 	/* read name */
 	if(obj->onamelth) {
 	    obj->oname = alloc(obj->onamelth);

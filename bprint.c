@@ -146,9 +146,9 @@ static void printfruit(void) {
 	assert(f->fname != NULL);
 	printf("%s%s", f==bones.fruitchain ? " " : ", ", f->fname);
 	assert(f->nextf != NULL);
-    }    
+    }
     assert(f->nextf == NULL); /* double check we've seen the whole list */
-    
+
     if(f==bones.fruitchain)
 	printf(" <none>");
     printf("\n");

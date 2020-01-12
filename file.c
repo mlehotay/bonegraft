@@ -143,7 +143,7 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     st->parent = parent;
 
     if(parent!=NULL) {
-	assert(parent->align >= st->align);	
+	assert(parent->align >= st->align);
 	align(parent, st->align);
     }
 
@@ -175,7 +175,7 @@ void endstruct(struct_t *st) {
 void align(struct_t *st, unsigned alignment) {
     uint8 foo;
 
-    assert(st != NULL);    
+    assert(st != NULL);
     assert(alignment==1 || alignment==2 || alignment==4);
 
     while((st->nbytes) % alignment) {
@@ -221,7 +221,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
 		    *((char *)buf+i) = '\0';
 		    nzeroes--;
 		} else {
-		    eread((char *)buf+i, 1, 1); 
+		    eread((char *)buf+i, 1, 1);
 		    if(*((char *)buf+i) == '\0') /* starting a new run */
 			eread(&nzeroes, 1, 1); /* read run length */
 		}
@@ -294,7 +294,7 @@ uint32 bread(unsigned len, struct_t *st) {
     assert(len > 0);
     assert(len <= fieldsz*8);
     assert(st != NULL);
-    
+
     if(st->nbits<len) {
 	if(st->nbits && fieldspan) { /* this field spans units */
 	    spanned = len - st->nbits;
@@ -324,7 +324,7 @@ uint32 bread(unsigned len, struct_t *st) {
 	else
 	    val = (spanval << len) | val;
     }
-    
+
     return val;
 }
 

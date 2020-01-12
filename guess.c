@@ -7,7 +7,7 @@
 #include <math.h>
 #include <process.h>
 
-/* 
+/*
  * Usage: graft [options] <filename>
  *   -b      switch byte ordering
  *   -i      use 16-bit ints
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     printf("Guess v0.01 (a tool for Bone Graft)\n");
     printf("Trying %g combinations of options. This might take a little while...\n",
 	pow(2, MAX_OPT) * pow(4, MAX_ARG));
-    
+
     for(argmask=0; argmask<HIGHARG; argmask++) {
 	for(optmask=0; optmask<HIGHOPT; optmask++) {
 	    pos = 2;
@@ -63,15 +63,15 @@ int main(int argc, char *argv[]) {
 		    vector[pos++] = arg[i];
 		}
 	    }
-	    
+
 	    for(i=0; i<MAX_OPT; i++) {
 		if(optmask & (1<<i))
 		    vector[pos++] = opt[i];
 	    }
 
-	    vector[pos++] = argv[1];	    
+	    vector[pos++] = argv[1];
 	    vector[pos] = NULL;
-	    
+
 	    status = spawnv(P_WAIT, vector[0], vector);
 	    switch(status) {
 	    case 0:
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 	    }
 	}
     }
-    
+
     printf("\nFinished. %ld successes, %ld failures.\n", good, bad);
     return 0;
 }

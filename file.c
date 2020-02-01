@@ -205,31 +205,41 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
 
      /* keep track of struct padding */
     if(st != NULL) {
-	clearfield(st);
-	align(st, (memberalign<len) ? memberalign : len);
-	st->nbytes += len*num;
+        clearfield(st);
+        align(st, (memberalign<len) ? memberalign : len);
+        st->nbytes += len*num;
     }
 
     /* read num items of len bytes */
     while(num--) {
-	if(countonly) { /* don't change run length or file position */
-	    for(i=0; i<len; i++)
-		*((char *)buf+i) = '\0';
-	} else if(zerocomp) {
-	    for(i=0; i<len; i++) {
-		if(nzeroes > 0) { /* in a run */
-		    *((char *)buf+i) = '\0';
-		    nzeroes--;
-		} else {
-		    eread((char *)buf+i, 1, 1);
-		    if(*((char *)buf+i) == '\0') /* starting a new run */
-			eread(&nzeroes, 1, 1); /* read run length */
-		}
-	    }
-	} else
-	    eread(buf, len, 1);
+        if(countonly) { /* don't change run length or file position */
+            for(i=0; i<len; i++)
+                *((char *)buf+i) = '\0';
+        } else if(zerocomp) {
+            for(i=0; i<len; i++) {
+                if(nzeroes > 0) { /* in a run */
+                    *((char *)buf+i) = '\0';
+                    nzeroes--;
+                } else {
+                    eread((char *)buf+i, 1, 1);
+                    if(*((char *)buf+i) == '\0') /* starting a new run */
+                        eread(&nzeroes, 1, 1); /* read run length */
+                }
+            }
+        } else
+            eread(buf, len, 1);
 
-	buf = (char *) buf + len; /* advance buf pointer to read next item */
+        buf = (char *) buf + len; /* advance buf pointer to read next item */
+
+        if(debug) {
+            int i;
+            printf("zread %u bytes: ", len);
+            for(i=0; i<len; i++) {
+                printf("%02x ", ((unsigned char *) buf)[i]);
+            }
+            printf("\n");
+        }
+
     }
 }
 
@@ -294,6 +304,10 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
     case 8:
     *((uint64 *) buf) = (uint64) val;
     }
+
+    if(debug) {
+        printf("iread %u bytes: %lu\n", len, val);
+    }
 }
 
 
@@ -311,33 +325,37 @@ uint32 bread(unsigned len, struct_t *st) {
     assert(st != NULL);
 
     if(st->nbits<len) {
-	if(st->nbits && fieldspan) { /* this field spans units */
-	    spanned = len - st->nbits;
-	    len = st->nbits;
-	} else { /* read in a new bitfield unit */
-	    iread(&st->fieldbuf, sizeof(st->fieldbuf), fieldsz, st);
-	    st->nbits = fieldsz*8;
-	}
+        if(st->nbits && fieldspan) { /* this field spans units */
+            spanned = len - st->nbits;
+            len = st->nbits;
+        } else { /* read in a new bitfield unit */
+            iread(&st->fieldbuf, sizeof(st->fieldbuf), fieldsz, st);
+            st->nbits = fieldsz*8;
+        }
     }
 
     mask = 0;
     for(i=0; i<len; i++) {
-	mask = (mask<<1) | 1;
+        mask = (mask<<1) | 1;
     }
 
     if(fieldMSB)
-	val = (st->fieldbuf >> (st->nbits - len)) & mask;
+        val = (st->fieldbuf >> (st->nbits - len)) & mask;
     else
-	val = (st->fieldbuf >> (fieldsz*8 - st->nbits)) & mask;
+        val = (st->fieldbuf >> (fieldsz*8 - st->nbits)) & mask;
 
     st->nbits -= len;
 
     if(spanned) {
-	uint32 spanval = bread(spanned, st);
-	if(fieldMSB)
-	    val = (val << spanned) | spanval;
-	else
-	    val = (spanval << len) | val;
+        uint32 spanval = bread(spanned, st);
+        if(fieldMSB)
+            val = (val << spanned) | spanval;
+        else
+            val = (spanval << len) | val;
+    }
+
+    if(debug) {
+        printf("bread %u bytes: %x\n", len, val);
     }
 
     return val;
@@ -349,20 +367,36 @@ uint32 bread(unsigned len, struct_t *st) {
  *****************************************************************************
  * read some data from file, terminate if unsuccessful
  */
-static void eread(void *buf, unsigned len, unsigned num) {
-    assert(buf != NULL);
-    assert(len==1 || len==2 || len==4);
-    assert(num > 0);
-    assert(fp != NULL);
+ static void eread(void *buf, unsigned len, unsigned num) {
+     assert(buf != NULL);
+     assert(len==1 || len==2 || len==4 || len==8);
+     assert(num > 0);
+     assert(fp != NULL);
 
-    if(num != fread(buf, len, num, fp)) {
-	if(feof(fp))
-	    bail(SEMANTIC_ERROR, "unexpected end of file");
-	else
-	    bail(SYSTEM_ERROR, "error reading file");
-    }
-}
+     if(num != fread(buf, len, num, fp)) {
+         if(feof(fp)) {
+             bail(SEMANTIC_ERROR, "unexpected end of file");
+         } else {
+             bail(SYSTEM_ERROR, "error reading file");
+         }
+     }
 
+     /*
+      * uint32 word = 0x0A0B0C0D;
+      *     Modern little-endian: 0d 0c 0b 0a
+      *     Modern big-endian: 0a 0b 0c 0d
+      *     PDP-11 (16-bit, little-endian word, big-endian order): 0b 0a 0d 0c
+      *     PDP-11 (16-bit, big-endian word, little-endian order): 0c 0d 0a 0b
+      */
+     if(debug) {
+         int i;
+         printf("eread %u bytes: ", len);
+         for(i=0; i<len; i++) {
+             printf("%02x ", ((unsigned char *) buf)[i]);
+         }
+         printf("\n");
+     }
+ }
 
 /*****************************************************************************
  * clearfield                                                                *
@@ -374,9 +408,9 @@ static void clearfield(struct_t *st) {
 
     if(st!=NULL && st->nbits) {
 	foo = bread(st->nbits, st);
-	/*
+
 	if(foo)
 	    bail(SEMANTIC_ERROR, "unread bitfields in buffer");
-	*/
+
     }
 }

@@ -19,7 +19,7 @@
 #include "bones.h"
 
 /* command line options */
-boolean verbose;
+boolean verbose, debug;
 
 /* private functions */
 static void printmagicnumbers(void);
@@ -34,6 +34,10 @@ static void printlevelflags(void);
  * print info from the bones file
  */
 void printbones(void) {
+    if(debug) {
+        printf("Printing bones info...\n");
+    }
+
     printmagicnumbers();
 
     if(headeronly)

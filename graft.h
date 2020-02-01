@@ -6,7 +6,7 @@
 #define GRAFT_H
 
 /* most recent version of NetHack we know about */
-#define LATEST_VERSION 0x03060200
+#define LATEST_VERSION 0x03070013
 
 /* exit codes */
 #define SYSTEM_ERROR   1
@@ -34,7 +34,7 @@ void readbones(char *fname);
 void freebones(void);
 
 /* bprint.c */
-extern boolean verbose;
+extern boolean verbose, debug;
 void printbones(void);
 
 #endif

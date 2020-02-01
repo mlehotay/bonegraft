@@ -78,6 +78,10 @@ static void readregions(void);
  * read the whole bones file
  */
 void readbones(char *fname) {
+    if(debug) {
+        printf("Reading bones file %s...\n", fname);
+    }
+
     bopen(fname);
     readmagicnumbers();
 
@@ -128,6 +132,10 @@ void readbones(char *fname) {
  */
 void freebones(void) {
     int i;
+
+    if(debug) {
+        printf("Freeing memory...\n");
+    }
 
     /* free the bones id */
     if(bones.bonesid != NULL) {

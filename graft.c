@@ -27,9 +27,10 @@ int main(int argc, char *argv[]) {
     parseopts(argc, argv);
     readbones(argv[argc-1]);
     if(!quiet) {
-	printf("Bone Graft v0.01\n");
-	printbones();
-    } freebones();
+        printf("Bone Graft v0.01\n");
+        printbones();
+    }
+    freebones();
     return 0;
 }
 
@@ -102,6 +103,7 @@ static void usage(void) {
     fprintf(stderr, "  -t      try to process unsupported bones versions\n");
     fprintf(stderr, "  -q      be quiet\n");
     fprintf(stderr, "  -v      be more verbose\n");
+    fprintf(stderr, "  -d      print debug messages\n");
     exit(USAGE_ERROR);
 }
 
@@ -115,7 +117,7 @@ static void parseopts(int argc, char *argv[]) {
     int c;
 
     /* read command line options */
-    while((c=getopt(argc, argv, "bipa:s:f:u:mcogynqvt")) != EOF) {
+    while((c=getopt(argc, argv, "bipa:s:f:u:mcogynqvtd")) != EOF) {
 	switch (c) {
 	case 'b':
 	    switchbytes = TRUE;
@@ -169,6 +171,9 @@ static void parseopts(int argc, char *argv[]) {
 		bail(USAGE_ERROR, "can't be both quiet and verbose");
 	    verbose = TRUE;
 	    break;
+    case 'd':
+        debug = TRUE;
+        break;
 	default:
 	    usage();
 	}

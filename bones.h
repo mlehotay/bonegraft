@@ -49,10 +49,10 @@
  */
 
 struct version_info {
-    uint32 incarnation;	    /* actual version number */
-    uint32 feature_set;	    /* bitmask of config settings */
-    uint32 entity_count;    /* # of monsters and objects */
-    uint32 struct_sizes;    /* size of key structs */
+    uint64 incarnation;	    /* actual version number */
+    uint64 feature_set;	    /* bitmask of config settings */
+    uint64 entity_count;    /* # of monsters and objects */
+    uint64 struct_sizes;    /* size of key structs */
 };
 
 #define PL_FSIZ 32 /* fruit name */

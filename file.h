@@ -9,7 +9,6 @@
 
 #define CHARSZ    1
 #define SHORTSZ   2
-#define LONGSZ    4
 #define MAXSZ     ((intsz > pointersz) ? intsz : pointersz)
 
 typedef struct st {
@@ -21,7 +20,7 @@ typedef struct st {
 } struct_t;
 
 extern boolean switchbytes, fieldMSB, fieldspan;
-extern unsigned intsz, fieldsz, pointersz;
+extern unsigned intsz, longsz, fieldsz, pointersz;
 extern unsigned memberalign, structalign, fieldalign;
 extern boolean zerocomp;
 

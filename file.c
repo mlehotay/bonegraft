@@ -17,6 +17,7 @@
 /* command line options */
 boolean switchbytes;      /* reverse byte ordering */
 unsigned intsz = 4;       /* size of ints */
+unsigned longsz = 4;       /* size of longs */
 unsigned pointersz = 4;   /* size of pointers */
 unsigned fieldsz = 2;     /* size of bitfield units (aka words) */
 unsigned memberalign = 4; /* struct member alignment = min(x, member size) */
@@ -115,7 +116,7 @@ unsigned getcount(void) {
 struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     struct_t *st;
 
-    assert(maxlen==1 || maxlen==2 || maxlen==4);
+    assert(maxlen==1 || maxlen==2 || maxlen==4 || maxlen==8);
     assert(fieldsz==1 || fieldsz==2 || fieldsz==4);
     assert(memberalign==1 || memberalign==2 || memberalign==4);
     assert(fieldalign>=0 && fieldalign<=4 && fieldalign!=3);
@@ -135,6 +136,10 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
 	st->align = (fieldalign>maxlen) ? fieldalign : maxlen;
     } else {
 	st->align = (structalign && structalign<maxlen) ? structalign : maxlen;
+    }
+
+    if(debug) {
+        printf("Start of struct, aligned at %u bytes...\n", st->align);
     }
 
     assert(st->align==1 || st->align==2 || st->align==4);
@@ -161,9 +166,14 @@ void endstruct(struct_t *st) {
     clearfield(st);
     align(st, st->align);
     numbytes = st->nbytes;
-    if(st->parent != NULL)
-	st->parent->nbytes += st->nbytes;
+    if(st->parent != NULL) {
+        st->parent->nbytes += st->nbytes;
+    }
     free(st);
+
+    if(debug) {
+        printf("End of struct, read %u bytes...\n", numbytes);
+    }
 }
 
 
@@ -199,7 +209,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
     unsigned i;
 
     assert(buf != NULL);
-    assert(len==1 || len==2 || len==4);
+    assert(len==1 || len==2 || len==4 || len==8);
     assert(num>0);
     assert(memberalign==1 || memberalign==2 || memberalign==4);
 
@@ -208,6 +218,10 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
         clearfield(st);
         align(st, (memberalign<len) ? memberalign : len);
         st->nbytes += len*num;
+    }
+
+    if(debug) {
+        printf("zread %u x %u bytes...\n", num, len);
     }
 
     /* read num items of len bytes */
@@ -230,16 +244,6 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
             eread(buf, len, 1);
 
         buf = (char *) buf + len; /* advance buf pointer to read next item */
-
-        if(debug) {
-            int i;
-            printf("zread %u bytes: ", len);
-            for(i=0; i<len; i++) {
-                printf("%02x ", ((unsigned char *) buf)[i]);
-            }
-            printf("\n");
-        }
-
     }
 }
 
@@ -256,8 +260,8 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
     uint64 buf8, val=0;
 
     assert(buf != NULL);
-    assert(buflen==1 || buflen==2 || buflen==4);
-    assert(len==1 || len==2 || len==4);
+    assert(buflen==1 || buflen==2 || buflen==4 || buflen==8);
+    assert(len==1 || len==2 || len==4 || len==8);
     assert(buflen >= len);
 
     switch(len) {
@@ -306,7 +310,7 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
     }
 
     if(debug) {
-        printf("iread %u bytes: %lu\n", len, val);
+        printf("iread %u bytes: %lx\n", len, val);
     }
 }
 

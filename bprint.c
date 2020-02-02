@@ -72,11 +72,11 @@ static void printmagicnumbers(void) {
 
     /* if not verbose, just print the numbers and return */
     if(!verbose) {
-	printf("Magic numbers: %08x, %08x, %08x", bones.header.incarnation,
+	printf("Magic numbers: %08lx, %08lx, %08lx", bones.header.incarnation,
 	    bones.header.feature_set, bones.header.entity_count);
 
 	if(bones.header.incarnation >= 0x03020100)
-	    printf(", %08x", bones.header.struct_sizes);
+	    printf(", %08lx", bones.header.struct_sizes);
 
 	printf("\n");
 	return;
@@ -87,7 +87,7 @@ static void printmagicnumbers(void) {
 	bones.vminor, bones.vpatch, bones.vedit);
 
     /* print features */
-    assert(sizeof(bones.header.feature_set) == 4);
+    /* assert(sizeof(bones.header.feature_set) == 4); */
     assert(sizeof(bits)/sizeof(bits[0]) == 32);
     printf("Features");
     cat = 0;

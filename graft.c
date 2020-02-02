@@ -90,6 +90,7 @@ static void usage(void) {
     fprintf(stderr, "  -b      switch byte ordering\n");
     fprintf(stderr, "  -i      use 16-bit ints\n");
     fprintf(stderr, "  -p      use 16-bit pointers\n");
+    fprintf(stderr, "  -l      use 64-bit longs\n");
     fprintf(stderr, "  -a <n>  align struct members on n-byte boundaries\n");
     fprintf(stderr, "  -s <n>  pad structs to multiples of n-bytes\n");
     fprintf(stderr, "  -f <n>  padding of structs containing bitfields\n");
@@ -117,7 +118,7 @@ static void parseopts(int argc, char *argv[]) {
     int c;
 
     /* read command line options */
-    while((c=getopt(argc, argv, "bipa:s:f:u:mcogynqvtd")) != EOF) {
+    while((c=getopt(argc, argv, "bipla:s:f:u:mcogynqvtd")) != EOF) {
 	switch (c) {
 	case 'b':
 	    switchbytes = TRUE;
@@ -128,6 +129,9 @@ static void parseopts(int argc, char *argv[]) {
 	case 'p':
 	    pointersz = 2;
 	    break;
+    case 'l':
+        longsz = 8;
+        break;
 	case 'a':
 	    memberalign = readarg(optarg, 'a');
 	    break;

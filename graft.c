@@ -21,8 +21,8 @@ static int readarg(char *arg, char opt);
 
 
 /*****************************************************************************
- * main                                                                      *
- *****************************************************************************/
+* main                                                                      *
+*****************************************************************************/
 int main(int argc, char *argv[]) {
     parseopts(argc, argv);
     readbones(argv[argc-1]);
@@ -45,35 +45,35 @@ void *alloc(unsigned len) {
 
     assert(len>0);
     if((p = malloc(len)) == NULL)
-	bail(SYSTEM_ERROR, "out of memory");
+        bail(SYSTEM_ERROR, "out of memory");
     return p;
 }
 
 
 /*****************************************************************************
- * bail                                                                      *
- *****************************************************************************/
+* bail                                                                      *
+*****************************************************************************/
 void bail(int status, char *message, ... ) {
     const char *exclaim[] = { "Ack! Pfft!", "Bah!", "Whoops!", "Argh!",
-	"Uh oh!", "Double plus ungood!", "Grrr!", "D'oh!", "Gah!" };
+                              "Uh oh!", "Double plus ungood!", "Grrr!", "D'oh!", "Gah!" };
 
     if(!quiet) {
-	if(message == NULL)
-	    fprintf(stderr, "Ahh! The bugs! Get them off!\n");
-	else {
-	    va_list args;
+        if(message == NULL)
+            fprintf(stderr, "Ahh! The bugs! Get them off!\n");
+        else {
+            va_list args;
 
-	    assert(*message != '\0');
-	    assert(*message != '%'); /* don't mess with printf specifiers */
-	    srand(time(NULL));
+            assert(*message != '\0');
+            assert(*message != '%'); /* don't mess with printf specifiers */
+            srand(time(NULL));
 
-	    va_start(args, message);
-	    fprintf(stderr, "%s %c", exclaim[rand() % (sizeof(exclaim) /
-		sizeof(exclaim[0]))], toupper(*(message++)));
-	    vfprintf(stderr, message, args);
-	    fprintf(stderr, "!\n");
-	    va_end(args);
-	}
+            va_start(args, message);
+            fprintf(stderr, "%s %c", exclaim[rand() % (sizeof(exclaim) /
+                                                       sizeof(exclaim[0]))], toupper(*(message++)));
+            vfprintf(stderr, message, args);
+            fprintf(stderr, "!\n");
+            va_end(args);
+        }
     }
 
     bclose();
@@ -83,8 +83,8 @@ void bail(int status, char *message, ... ) {
 
 
 /*****************************************************************************
- * usage                                                                     *
- *****************************************************************************/
+* usage                                                                     *
+*****************************************************************************/
 static void usage(void) {
     fprintf(stderr, "Usage: graft [options] <filename>\n");
     fprintf(stderr, "  -b      switch byte ordering\n");
@@ -119,73 +119,73 @@ static void parseopts(int argc, char *argv[]) {
 
     /* read command line options */
     while((c=getopt(argc, argv, "bipla:s:f:u:mcogynqvtd")) != EOF) {
-	switch (c) {
-	case 'b':
-	    switchbytes = TRUE;
-	    break;
-	case 'i':
-	    intsz = 2;
-	    break;
-	case 'p':
-	    pointersz = 2;
-	    break;
-    case 'l':
-        longsz = 8;
-        break;
-	case 'a':
-	    memberalign = readarg(optarg, 'a');
-	    break;
-	case 's':
-	    structalign = readarg(optarg, 's');
-	    break;
-	case 'f':
-	    fieldalign = readarg(optarg, 'f');
-	    break;
-	case 'u':
-	    fieldsz = readarg(optarg, 'u');
-	    break;
-	case 'm':
-	    fieldMSB = TRUE;
-	    break;
-	case 'c':
-	    fieldspan = TRUE;
-	    break;
-	case 'o':
-	    invisibleobjects = TRUE;
-	    break;
-	case 'g':
-	    nosignal = TRUE;
-	    break;
-	case 'y':
-	    bigyou = TRUE;
-	    break;
-	case 'n':
-	    headeronly = TRUE;
-	    break;
-	case 't':
-	    forceversion = TRUE;
-	    break;
-	case 'q':
-	    if(verbose)
-		bail(USAGE_ERROR, "can't be both quiet and verbose");
-	    quiet = TRUE;
-	    break;
-	case 'v':
-	    if(quiet)
-		bail(USAGE_ERROR, "can't be both quiet and verbose");
-	    verbose = TRUE;
-	    break;
-    case 'd':
-        debug = TRUE;
-        break;
-	default:
-	    usage();
-	}
+        switch (c) {
+        case 'b':
+            switchbytes = TRUE;
+            break;
+        case 'i':
+            intsz = 2;
+            break;
+        case 'p':
+            pointersz = 2;
+            break;
+        case 'l':
+            longsz = 8;
+            break;
+        case 'a':
+            memberalign = readarg(optarg, 'a');
+            break;
+        case 's':
+            structalign = readarg(optarg, 's');
+            break;
+        case 'f':
+            fieldalign = readarg(optarg, 'f');
+            break;
+        case 'u':
+            fieldsz = readarg(optarg, 'u');
+            break;
+        case 'm':
+            fieldMSB = TRUE;
+            break;
+        case 'c':
+            fieldspan = TRUE;
+            break;
+        case 'o':
+            invisibleobjects = TRUE;
+            break;
+        case 'g':
+            nosignal = TRUE;
+            break;
+        case 'y':
+            bigyou = TRUE;
+            break;
+        case 'n':
+            headeronly = TRUE;
+            break;
+        case 't':
+            forceversion = TRUE;
+            break;
+        case 'q':
+            if(verbose)
+                bail(USAGE_ERROR, "can't be both quiet and verbose");
+            quiet = TRUE;
+            break;
+        case 'v':
+            if(quiet)
+                bail(USAGE_ERROR, "can't be both quiet and verbose");
+            verbose = TRUE;
+            break;
+        case 'd':
+            debug = TRUE;
+            break;
+        default:
+            usage();
+        }
     }
 
     /* make sure filename was specified, and nothing else afterwards */
     if(optind != argc-1)
-	usage();
+        usage();
 }
 
 
@@ -200,18 +200,18 @@ static int readarg(char *arg, char opt) {
 
     /* check for missing argument */
     if(arg == NULL || *arg == '\0')
-	usage();
+        usage();
 
     /* check for non-digits */
     for(p = arg; *p; p++) {
-	if(!isdigit(*p))
-	    bail(USAGE_ERROR, "non-numeric argument to -%c option", opt);
+        if(!isdigit(*p))
+            bail(USAGE_ERROR, "non-numeric argument to -%c option", opt);
     }
 
     /* check for unexpected values */
     i = atoi(optarg);
     if(i!=1 && i!=2 && i!=4)
-	bail(USAGE_ERROR, "-%c argument must be 1, 2 or 4", opt);
+        bail(USAGE_ERROR, "-%c argument must be 1, 2 or 4", opt);
 
     return i;
 }

@@ -12,11 +12,11 @@
 #define MAXSZ     ((intsz > pointersz) ? intsz : pointersz)
 
 typedef struct st {
-    unsigned nbytes;	/* number of bytes read so far */
-    unsigned align;	/* alignment requirement */
-    uint32 fieldbuf;	/* buffer for reading bitfields */
-    unsigned nbits;	/* number of unread bits fieldbuf */
-    struct st *parent;	/* enclosing struct, if this is a nested struct */
+    unsigned nbytes;    /* number of bytes read so far */
+    unsigned align;     /* alignment requirement */
+    uint32 fieldbuf;    /* buffer for reading bitfields */
+    unsigned nbits;     /* number of unread bits fieldbuf */
+    struct st *parent;  /* enclosing struct, if this is a nested struct */
 } struct_t;
 
 extern boolean switchbytes, fieldMSB, fieldspan;

@@ -1,37 +1,37 @@
 /* CVS $Id: getopt.c,v 1.1.1.1 2005/06/22 05:17:22 Michael Exp $ */
 
 /*****************************************************************************
- *
- *  MODULE NAME : GETOPT.C
- *
- *  COPYRIGHTS:
- *             This module contains code made available by IBM
- *             Corporation on an AS IS basis.  Any one receiving the
- *             module is considered to be licensed under IBM copyrights
- *             to use the IBM-provided source code in any way he or she
- *             deems fit, including copying it, compiling it, modifying
- *             it, and redistributing it, with or without
- *             modifications.  No license under any IBM patents or
- *             patent applications is to be implied from this copyright
- *             license.
- *
- *             A user of the module should understand that IBM cannot
- *             provide technical support for the module and will not be
- *             responsible for any consequences of use of the program.
- *
- *             Any notices, including this one, are not to be removed
- *             from the module without the prior written consent of
- *             IBM.
- *
- *  AUTHOR:   Original author:
- *                 G. R. Blair (BOBBLAIR at AUSVM1)
- *                 Internet: bobblair@bobblair.austin.ibm.com
- *
- *            Extensively revised by:
- *                 John Q. Walker II, Ph.D. (JOHHQ at RALVM6)
- *                 Internet: johnq@ralvm6.vnet.ibm.com
- *
- *****************************************************************************/
+*
+*  MODULE NAME : GETOPT.C
+*
+*  COPYRIGHTS:
+*             This module contains code made available by IBM
+*             Corporation on an AS IS basis.  Any one receiving the
+*             module is considered to be licensed under IBM copyrights
+*             to use the IBM-provided source code in any way he or she
+*             deems fit, including copying it, compiling it, modifying
+*             it, and redistributing it, with or without
+*             modifications.  No license under any IBM patents or
+*             patent applications is to be implied from this copyright
+*             license.
+*
+*             A user of the module should understand that IBM cannot
+*             provide technical support for the module and will not be
+*             responsible for any consequences of use of the program.
+*
+*             Any notices, including this one, are not to be removed
+*             from the module without the prior written consent of
+*             IBM.
+*
+*  AUTHOR:   Original author:
+*                 G. R. Blair (BOBBLAIR at AUSVM1)
+*                 Internet: bobblair@bobblair.austin.ibm.com
+*
+*            Extensively revised by:
+*                 John Q. Walker II, Ph.D. (JOHHQ at RALVM6)
+*                 Internet: johnq@ralvm6.vnet.ibm.com
+*
+*****************************************************************************/
 
 /******************************************************************************
  * getopt()
@@ -76,8 +76,8 @@
 
 /* static (global) variables that are specified as exported by getopt() */
 char *optarg = NULL;    /* pointer to the start of the option argument  */
-int   optind = 1;       /* number of the next argv[] to be evaluated    */
-int   opterr = 0;       /* non-zero if a question mark should be returned
+int optind = 1;         /* number of the next argv[] to be evaluated    */
+int opterr = 0;         /* non-zero if a question mark should be returned
                            when a non-valid option character is detected */
 
 /* handle possible future character set concerns by putting this in a macro */

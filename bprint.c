@@ -41,7 +41,7 @@ void printbones(void) {
     printmagicnumbers();
 
     if(headeronly)
-	return;
+        return;
 
     assert(bones.bonesid != NULL);
     printf("Bones ID: %s\n", bones.bonesid);
@@ -58,33 +58,33 @@ void printbones(void) {
  */
 static void printmagicnumbers(void) {
     const char *bits[] = {"MULDGN", "REINCARNATION", "SINKS",  "<bit 3>",
-	"<bit 4>", "ARMY", "KOPS", "MAIL", "<bit 8>", "<bit 9>", "TOURIST",
-	"STEED", "GOLDOBJ", "<bit 13>", "<bit 14>", "MUSE", "POLYSELF",
-	"TEXTCOLOR", "INSURANCE", "ELBERETH", "EXP_ON_BOTL", "SCORE_ON_BOTL",
-	"WEAPON_SKILLS", "TIMED_DELAY", "<bit 24>", "<bit 25>", "<bit 26>",
-	"ZEROCOMP", "RLECOMP", "<bit 29>", "<bit 30>", "<bit 31>"};
-	/* bit 11 (STEED) was TUTTI_FRUTTI prior to 3.3.0 */
-	/* bit 12 (GOLDOBJ) was WALKIES prior to 3.4.0 */
+                          "<bit 4>", "ARMY", "KOPS", "MAIL", "<bit 8>", "<bit 9>", "TOURIST",
+                          "STEED", "GOLDOBJ", "<bit 13>", "<bit 14>", "MUSE", "POLYSELF",
+                          "TEXTCOLOR", "INSURANCE", "ELBERETH", "EXP_ON_BOTL", "SCORE_ON_BOTL",
+                          "WEAPON_SKILLS", "TIMED_DELAY", "<bit 24>", "<bit 25>", "<bit 26>",
+                          "ZEROCOMP", "RLECOMP", "<bit 29>", "<bit 30>", "<bit 31>"};
+    /* bit 11 (STEED) was TUTTI_FRUTTI prior to 3.3.0 */
+    /* bit 12 (GOLDOBJ) was WALKIES prior to 3.4.0 */
     const char *category[] = {"Dungeon:", "Monsters:", "Objects:", "Flags:",
-	"Format:"};
+                              "Format:"};
     boolean first = TRUE;
     int i, cat;
 
     /* if not verbose, just print the numbers and return */
     if(!verbose) {
-	printf("Magic numbers: %08lx, %08lx, %08lx", bones.header.incarnation,
-	    bones.header.feature_set, bones.header.entity_count);
+        printf("Magic numbers: %08lx, %08lx, %08lx", bones.header.incarnation,
+               bones.header.feature_set, bones.header.entity_count);
 
-	if(bones.header.incarnation >= 0x03020100)
-	    printf(", %08lx", bones.header.struct_sizes);
+        if(bones.header.incarnation >= 0x03020100)
+            printf(", %08lx", bones.header.struct_sizes);
 
-	printf("\n");
-	return;
+        printf("\n");
+        return;
     }
 
     /* print version */
     printf("NetHack version %d.%d.%d editlevel %d\n", bones.vmajor,
-	bones.vminor, bones.vpatch, bones.vedit);
+           bones.vminor, bones.vpatch, bones.vedit);
 
     /* print features */
     /* assert(sizeof(bones.header.feature_set) == 4); */
@@ -92,28 +92,28 @@ static void printmagicnumbers(void) {
     printf("Features");
     cat = 0;
     for(i=0; i<32; i++) {
-	switch(i) {
-	case 0: case 5: case 10: case 15: case 27:
-	    printf("\n %s", category[cat++]);
-	    first = TRUE;
-	}
-	if((1<<i) & bones.header.feature_set) {
-	    const char *feature;
+        switch(i) {
+        case 0: case 5: case 10: case 15: case 27:
+            printf("\n %s", category[cat++]);
+            first = TRUE;
+        }
+        if((1<<i) & bones.header.feature_set) {
+            const char *feature;
 
-	    /* hard wired exceptions. bleh. */
-	    if(i==11 && bones.header.incarnation < 0x03030000)
-		feature = "TUTTI_FRUTTI";
-	    else if(i==12 && bones.header.incarnation < 0x03040000)
-		feature = "WALKIES";
-	    else
-		feature = bits[i];
+            /* hard wired exceptions. bleh. */
+            if(i==11 && bones.header.incarnation < 0x03030000)
+                feature = "TUTTI_FRUTTI";
+            else if(i==12 && bones.header.incarnation < 0x03040000)
+                feature = "WALKIES";
+            else
+                feature = bits[i];
 
-	    /* printf("%s%s", first ? " " : ", ", feature); */
-	    printf(" %s", feature);
-	    first = FALSE;
-	}
-	if(first && (i==4 || i==9 || i==14 || i==26 || i==31))
-	    printf(" <none>");
+            /* printf("%s%s", first ? " " : ", ", feature); */
+            printf(" %s", feature);
+            first = FALSE;
+        }
+        if(first && (i==4 || i==9 || i==14 || i==26 || i==31))
+            printf(" <none>");
     }
     printf("\n");
 
@@ -125,11 +125,11 @@ static void printmagicnumbers(void) {
 
     /* print sanity 2 */
     if(bones.header.incarnation >= 0x03020100) {
-	printf("Structure sizes\n");
-	printf(" you: %d\n", bones.yousz);
-	printf(" monst: %d\n", bones.monstsz);
-	printf(" obj: %d\n", bones.objsz);
-	printf(" flag: %d\n", bones.flagsz);
+        printf("Structure sizes\n");
+        printf(" you: %d\n", bones.yousz);
+        printf(" monst: %d\n", bones.monstsz);
+        printf(" obj: %d\n", bones.objsz);
+        printf(" flag: %d\n", bones.flagsz);
     }
     printf("\n");
 }
@@ -147,14 +147,14 @@ static void printfruit(void) {
 
     printf("Fruit:");
     for(f=bones.fruitchain; f->fid; f=f->nextf) {
-	assert(f->fname != NULL);
-	printf("%s%s", f==bones.fruitchain ? " " : ", ", f->fname);
-	assert(f->nextf != NULL);
+        assert(f->fname != NULL);
+        printf("%s%s", f==bones.fruitchain ? " " : ", ", f->fname);
+        assert(f->nextf != NULL);
     }
     assert(f->nextf == NULL); /* double check we've seen the whole list */
 
     if(f==bones.fruitchain)
-	printf(" <none>");
+        printf(" <none>");
     printf("\n");
 }
 
@@ -179,19 +179,19 @@ static void printmap(void) {
     int x, y;
 
     if(bones.header.incarnation<0x03030000)
-	p = glyphs320;
+        p = glyphs320;
     else if(bones.header.incarnation==0x03030000)
-	p = glyphs330;
+        p = glyphs330;
     else
-	p = glyphs331;
+        p = glyphs331;
 
     for(y=0; y<ROWNO; y++) {
-	/* Columns seem to be 1-based arrays, not 0-based. Hope I'm right. */
-	for(x=1; x<COLNO; x++) {
-	    assert((unsigned) bones.locations[x][y].typ < strlen(p));
-	    printf("%c", p[(unsigned) bones.locations[x][y].typ]);
-	}
-	printf("\n");
+        /* Columns seem to be 1-based arrays, not 0-based. Hope I'm right. */
+        for(x=1; x<COLNO; x++) {
+            assert((unsigned) bones.locations[x][y].typ < strlen(p));
+            printf("%c", p[(unsigned) bones.locations[x][y].typ]);
+        }
+        printf("\n");
     }
 }
 
@@ -204,40 +204,40 @@ static void printmap(void) {
 static void printlevelflags(void) {
     printf("Level flags:");
     if(bones.flags.has_shop)
-	printf(" has_shop");
+        printf(" has_shop");
     if(bones.flags.has_vault)
-	printf(" has_vault");
+        printf(" has_vault");
     if(bones.flags.has_zoo)
-	printf(" has_zoo");
+        printf(" has_zoo");
     if(bones.flags.has_court)
-	printf(" has_court");
+        printf(" has_court");
     if(bones.flags.has_morgue)
-	printf(" has_morgue");
+        printf(" has_morgue");
     if(bones.flags.has_beehive)
-	printf(" has_beehive");
+        printf(" has_beehive");
     if(bones.flags.has_barracks)
-	printf(" has_barracks");
+        printf(" has_barracks");
     if(bones.flags.has_temple)
-	printf(" has_temple");
+        printf(" has_temple");
     if(bones.flags.has_swamp)
-	printf(" has_swamp");
+        printf(" has_swamp");
     if(bones.flags.noteleport)
-	printf(" noteleport");
+        printf(" noteleport");
     if(bones.flags.hardfloor)
-	printf(" hardfloor");
+        printf(" hardfloor");
     if(bones.flags.nommap)
-	printf(" nommap");
+        printf(" nommap");
     if(bones.flags.hero_memory)
-	printf(" hero_memory");
+        printf(" hero_memory");
     if(bones.flags.shortsighted)
-	printf(" shortsighted");
+        printf(" shortsighted");
     if(bones.flags.graveyard)
-	printf(" graveyard");
+        printf(" graveyard");
     if(bones.flags.is_maze_lev)
-	printf(" is_maze_lev");
+        printf(" is_maze_lev");
     if(bones.flags.is_cavernous_lev)
-	printf(" is_cavernous_lev");
+        printf(" is_cavernous_lev");
     if(bones.flags.arboreal)
-	printf(" arboreal");
+        printf(" arboreal");
     printf("\n");
 }

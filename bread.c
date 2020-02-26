@@ -86,8 +86,8 @@ void readbones(char *fname) {
     readmagicnumbers();
 
     if(headeronly) {
-	bclose();
-	return;
+        bclose();
+        return;
     }
 
     structsizes();
@@ -96,8 +96,8 @@ void readbones(char *fname) {
     readmap();
 
     if(bones.header.incarnation >= 0x03030000) {
-	readdoors();
-	readrooms();
+        readdoors();
+        readrooms();
     }
 
     readtimers();
@@ -111,14 +111,14 @@ void readbones(char *fname) {
     readengravings();
 
     if(bones.header.incarnation < 0x03030000) {
-	readrooms();
-	readdoors();
+        readrooms();
+        readdoors();
     }
 
     readdamage();
 
     if(bones.header.incarnation >= 0x03030000)
-	readregions();
+        readregions();
 
     testeof();
     bclose();
@@ -139,108 +139,108 @@ void freebones(void) {
 
     /* free the bones id */
     if(bones.bonesid != NULL) {
-	free(bones.bonesid);
-	bones.bonesid = NULL;
+        free(bones.bonesid);
+        bones.bonesid = NULL;
     }
 
     /* free fruit */
     while(bones.fruitchain != NULL) {
-	struct fruit *p = bones.fruitchain->nextf;
-	free(bones.fruitchain);
-	bones.fruitchain = p;
+        struct fruit *p = bones.fruitchain->nextf;
+        free(bones.fruitchain);
+        bones.fruitchain = p;
     }
 
     /* free rooms */
     for(i=0; i<bones.nroom; i++) {
-	if(bones.rooms[i] != NULL) {
-	    freeroom(bones.rooms[i]);
-	    bones.rooms[i] = NULL;
-	}
+        if(bones.rooms[i] != NULL) {
+            freeroom(bones.rooms[i]);
+            bones.rooms[i] = NULL;
+        }
     }
 
     /* free timers */
     while(bones.timer_base != NULL) {
-	timer_element *p = bones.timer_base->next;
-	free(bones.timer_base);
-	bones.timer_base = p;
+        timer_element *p = bones.timer_base->next;
+        free(bones.timer_base);
+        bones.timer_base = p;
     }
 
     /* free light sources */
     while(bones.light_base != NULL) {
-	struct ls_t *p = bones.light_base->next;
-	free(bones.light_base);
-	bones.light_base = p;
+        struct ls_t *p = bones.light_base->next;
+        free(bones.light_base);
+        bones.light_base = p;
     }
 
     /* free monsters */
     if(bones.monchn != NULL) {
-	freemonsters(bones.monchn);
-	bones.monchn = NULL;
+        freemonsters(bones.monchn);
+        bones.monchn = NULL;
     }
 
     /* free worms */
     for(i=0; i<MAX_NUM_WORMS; i++) {
-	while(bones.wsegments[i] != NULL) {
-	    struct wseg *p = bones.wsegments[i]->nseg;
-	    free(bones.wsegments[i]);
-	    bones.wsegments[i] = p;
-	}
+        while(bones.wsegments[i] != NULL) {
+            struct wseg *p = bones.wsegments[i]->nseg;
+            free(bones.wsegments[i]);
+            bones.wsegments[i] = p;
+        }
     }
 
     /* free traps */
     while(bones.trapchn != NULL) {
-	struct trap *p = bones.trapchn->ntrap;
-	free(bones.trapchn);
-	bones.trapchn = p;
+        struct trap *p = bones.trapchn->ntrap;
+        free(bones.trapchn);
+        bones.trapchn = p;
     }
 
     /* free objects */
     if(bones.objchn != NULL) {
-	freeobjects(bones.objchn);
-	bones.objchn = NULL;
+        freeobjects(bones.objchn);
+        bones.objchn = NULL;
     }
     if(bones.buriedobjs != NULL) {
-	freeobjects(bones.buriedobjs);
-	bones.buriedobjs = NULL;
+        freeobjects(bones.buriedobjs);
+        bones.buriedobjs = NULL;
     }
     if(bones.billobjs != NULL) {
-	freeobjects(bones.billobjs);
-	bones.billobjs = NULL;
+        freeobjects(bones.billobjs);
+        bones.billobjs = NULL;
     }
 
     /* free engravings */
     while(bones.engravings != NULL) {
-	struct engr *p = bones.engravings->nxt_engr;
-	if(bones.engravings->engr_txt != NULL)
-	    free(bones.engravings->engr_txt);
-	free(bones.engravings);
-	bones.engravings = p;
+        struct engr *p = bones.engravings->nxt_engr;
+        if(bones.engravings->engr_txt != NULL)
+            free(bones.engravings->engr_txt);
+        free(bones.engravings);
+        bones.engravings = p;
     }
 
     /* free damage */
     while(bones.damage != NULL) {
-	struct damage *p = bones.damage->next;
-	free(bones.damage);
-	bones.damage = p;
+        struct damage *p = bones.damage->next;
+        free(bones.damage);
+        bones.damage = p;
     }
 
     /* free regions */
     if(bones.regions != NULL) {
-	for(i=0; i<bones.nregions; i++) {
-	    if(bones.regions[i] != NULL) {
-		if(bones.regions[i]->rects != NULL)
-		    free(bones.regions[i]->rects);
-		if(bones.regions[i]->enter_msg != NULL)
-		    free(bones.regions[i]->enter_msg);
-		if(bones.regions[i]->leave_msg != NULL)
-		    free(bones.regions[i]->leave_msg);
-		if(bones.regions[i]->monsters != NULL)
-		    free(bones.regions[i]->monsters);
-		free(bones.regions[i]);
-	    }
-	}
-	free(bones.regions);
-	bones.regions = NULL;
+        for(i=0; i<bones.nregions; i++) {
+            if(bones.regions[i] != NULL) {
+                if(bones.regions[i]->rects != NULL)
+                    free(bones.regions[i]->rects);
+                if(bones.regions[i]->enter_msg != NULL)
+                    free(bones.regions[i]->enter_msg);
+                if(bones.regions[i]->leave_msg != NULL)
+                    free(bones.regions[i]->leave_msg);
+                if(bones.regions[i]->monsters != NULL)
+                    free(bones.regions[i]->monsters);
+                free(bones.regions[i]);
+            }
+        }
+        free(bones.regions);
+        bones.regions = NULL;
     }
 }
 
@@ -261,12 +261,12 @@ static void readmagicnumbers(void) {
 
     /* Bones didn't have file headers before version 3.2.0. Test for this. */
     if(!headeronly && bones.header.incarnation < 0x03020000)
-	bail(SEMANTIC_ERROR, "bones file pretending to be from version "
-	    "%d.%d.%d", bones.vmajor, bones.vminor, bones.vpatch);
+        bail(SEMANTIC_ERROR, "bones file pretending to be from version "
+             "%d.%d.%d", bones.vmajor, bones.vminor, bones.vpatch);
 
     /* don't process unsupported/untested versions unless explicitly told to */
     if(!headeronly && !forceversion && bones.header.incarnation>LATEST_VERSION)
-	bail(SEMANTIC_ERROR, "bones file is from the future");
+        bail(SEMANTIC_ERROR, "bones file is from the future");
 
     /* Some (all?) of the features from the "flag bits" category (bits 15-26)
      * don't affect bones. Maybe allow them to be arbitrarily set or cleared
@@ -280,26 +280,26 @@ static void readmagicnumbers(void) {
 
     /* file header contains struct sizes since version 3.2.1 */
     if(bones.header.incarnation >= 0x03020100) {
-	iread(&bones.header.struct_sizes, sizeof(bones.header.struct_sizes), longsz, st);
-	if(bigyou) {
-	    bones.yousz = (uint16) (bones.header.struct_sizes & 0x7FF);
-	    bones.monstsz = (uint8) ((bones.header.struct_sizes>>10) & 0x7F);
-	    /* since struct you is so big, structs are probably not packed,
-	     * it's unlikely that struct monst would be aligned on odd bytes */
-	    bones.monstsz &= ~0x01; /* clear the lowest bit */
-	} else {
-	    bones.yousz = (uint16) (bones.header.struct_sizes & 0x3FF);
-	    bones.monstsz = (uint8) ((bones.header.struct_sizes>>10) & 0x7F);
-	}
-	bones.objsz = (uint8) ((bones.header.struct_sizes>>17) & 0x7F);
-	bones.flagsz = (uint8) ((bones.header.struct_sizes>>24) & 0xFF);
+        iread(&bones.header.struct_sizes, sizeof(bones.header.struct_sizes), longsz, st);
+        if(bigyou) {
+            bones.yousz = (uint16) (bones.header.struct_sizes & 0x7FF);
+            bones.monstsz = (uint8) ((bones.header.struct_sizes>>10) & 0x7F);
+            /* since struct you is so big, structs are probably not packed,
+             * it's unlikely that struct monst would be aligned on odd bytes */
+            bones.monstsz &= ~0x01; /* clear the lowest bit */
+        } else {
+            bones.yousz = (uint16) (bones.header.struct_sizes & 0x3FF);
+            bones.monstsz = (uint8) ((bones.header.struct_sizes>>10) & 0x7F);
+        }
+        bones.objsz = (uint8) ((bones.header.struct_sizes>>17) & 0x7F);
+        bones.flagsz = (uint8) ((bones.header.struct_sizes>>24) & 0xFF);
     }
 
     endstruct(st);
 
     /* remember the important options */
     goldobj = (bones.header.incarnation >= 0x03040000) &&
-	((bones.header.feature_set & (1<<12)) != 0);
+              ((bones.header.feature_set & (1<<12)) != 0);
     zerocomp = (bones.header.feature_set & (1<<27)) != 0;
     rlecomp = (bones.header.feature_set & (1<<28)) != 0;
 }
@@ -316,14 +316,14 @@ static void teststring(char *s, unsigned buflen) {
     assert(s != NULL);
 
     for(i=0; i<buflen && s[i]!='\0'; i++) {
-	/* don't check for isprint(), what about 8 bit pet names? */
-	/* if(!isprint(s[i]))
-	    bail(SEMANTIC_ERROR, "nonprintable characters in string");
-	 */
+        /* don't check for isprint(), what about 8 bit pet names? */
+        /* if(!isprint(s[i]))
+            bail(SEMANTIC_ERROR, "nonprintable characters in string");
+         */
     }
 
     if(i == buflen)
-	bail(SEMANTIC_ERROR, "unterminated string");
+        bail(SEMANTIC_ERROR, "unterminated string");
 }
 
 
@@ -337,7 +337,7 @@ static void readbonesid(void) {
 
     iread(&len, sizeof(len), CHARSZ, NULL);
     if(len>10)
-	bail(SEMANTIC_ERROR, "bonesid is too long");
+        bail(SEMANTIC_ERROR, "bonesid is too long");
     bones.bonesid = alloc(len);
     zread(bones.bonesid, 1, len, NULL);
     teststring(bones.bonesid, 10);
@@ -353,26 +353,26 @@ static void readfruit(void) {
     struct fruit *f, *tail = NULL;
 
     do { /* keep reading structs until we find the sentinel with fid=0 */
-	struct_t *st;
-	uint32 grot;
+        struct_t *st;
+        uint32 grot;
 
-	/* allocate a struct fruit and add it to the fruit chain */
-	f = alloc(sizeof(struct fruit));
-	f->nextf = NULL;
-	if(bones.fruitchain == NULL)
-	    bones.fruitchain = tail = f;
-	else {
-	    tail->nextf = f;
-	    tail = f;
-	}
+        /* allocate a struct fruit and add it to the fruit chain */
+        f = alloc(sizeof(struct fruit));
+        f->nextf = NULL;
+        if(bones.fruitchain == NULL)
+            bones.fruitchain = tail = f;
+        else {
+            tail->nextf = f;
+            tail = f;
+        }
 
-	/* read fruit from file */
-	st = startstruct(NULL, FALSE, MAXSZ);
-	zread(f->fname, 1, PL_FSIZ, st);
-	teststring(f->fname, PL_FSIZ);
-	iread(&f->fid, sizeof(f->fid), intsz, st);
-	zread(&grot, pointersz, 1, st); /* f->nextf */
-	endstruct(st);
+        /* read fruit from file */
+        st = startstruct(NULL, FALSE, MAXSZ);
+        zread(f->fname, 1, PL_FSIZ, st);
+        teststring(f->fname, PL_FSIZ);
+        iread(&f->fid, sizeof(f->fid), intsz, st);
+        zread(&grot, pointersz, 1, st); /* f->nextf */
+        endstruct(st);
     } while(f->fid);
 }
 
@@ -414,32 +414,32 @@ static void readmap(void) {
     iread(&bones.dlvl, sizeof(bones.dlvl), CHARSZ, NULL);/* ledger_no(&u.uz) */
 
     if(rlecomp) { /* run length encoding */
-	uint8 len = 0; /* length of current run */
-	struct rm r = {0};  /* initialized to make lint happy */
+        uint8 len = 0; /* length of current run */
+        struct rm r = {0};  /* initialized to make lint happy */
 
-	for(y=0; y<ROWNO; y++) { /* note: rows are in the outer loop */
-	    for(x=0; x<COLNO; x++) {
-		if(!len) {
-		    zread(&len, CHARSZ, 1, NULL); /* start a new run */
-		    if(len > ROWNO*COLNO)
-			bail(SEMANTIC_ERROR, "run length is too long");
-		    readlocation(&r);
-		}
+        for(y=0; y<ROWNO; y++) { /* note: rows are in the outer loop */
+            for(x=0; x<COLNO; x++) {
+                if(!len) {
+                    zread(&len, CHARSZ, 1, NULL); /* start a new run */
+                    if(len > ROWNO*COLNO)
+                        bail(SEMANTIC_ERROR, "run length is too long");
+                    readlocation(&r);
+                }
 
-		bones.locations[x][y] = r;
-		len--;
-	    }
-	}
+                bones.locations[x][y] = r;
+                len--;
+            }
+        }
 
-	if(len)
-	    bail(SEMANTIC_ERROR, "RLE stops in middle of run");
+        if(len)
+            bail(SEMANTIC_ERROR, "RLE stops in middle of run");
 
     } else {
-	for(x=0; x<COLNO; x++) { /* here columns are in the outer loop */
-	    for(y=0; y<ROWNO; y++) {
-		readlocation(&bones.locations[x][y]);
-	    }
-	}
+        for(x=0; x<COLNO; x++) { /* here columns are in the outer loop */
+            for(y=0; y<ROWNO; y++) {
+                readlocation(&bones.locations[x][y]);
+            }
+        }
     }
 
     iread(&bones.monstermoves, sizeof(bones.monstermoves), longsz, NULL);
@@ -472,7 +472,7 @@ static void readmap(void) {
     bones.flags.is_maze_lev = bread(1, st);
     bones.flags.is_cavernous_lev = bread(1, st);
     if(bones.header.incarnation >= 0x03030000)
-	bones.flags.arboreal = bread(1, st);
+        bones.flags.arboreal = bread(1, st);
     endstruct(st);
 }
 
@@ -558,7 +558,7 @@ static void readdoors(void) {
     int i;
 
     for(i=0; i<DOORMAX; i++)
-	readcoord(NULL, &bones.doors[i]);
+        readcoord(NULL, &bones.doors[i]);
 }
 
 
@@ -587,22 +587,22 @@ static struct mkroom *readroom(void) {
     iread(&r->doorct, sizeof(r->doorct), CHARSZ, st);
     iread(&r->fdoor, sizeof(r->fdoor), CHARSZ, st);
     if((r->fdoor + r->doorct) > DOORMAX)
-	bail(SEMANTIC_ERROR, "too many doors");
+        bail(SEMANTIC_ERROR, "too many doors");
     iread(&r->nsubrooms, sizeof(r->nsubrooms), CHARSZ, st);
     if(r->nsubrooms>MAX_SUBROOMS)
-	bail(SEMANTIC_ERROR, "too many subrooms");
+        bail(SEMANTIC_ERROR, "too many subrooms");
     iread(&r->irregular, sizeof(r->irregular), CHARSZ, st);
 
     /* pointer values from file are garbage */
     for(i=0; i<MAX_SUBROOMS; i++) {
-	r->sbrooms[i] = NULL;
-	zread(&grot, pointersz, 1, st);
+        r->sbrooms[i] = NULL;
+        zread(&grot, pointersz, 1, st);
     }
     zread(&grot, pointersz, 1, st); /* r->resident */
     endstruct(st);
 
     for(i=0; i<r->nsubrooms; i++)
-	r->sbrooms[i] = readroom();
+        r->sbrooms[i] = readroom();
 
     return r;
 }
@@ -618,7 +618,7 @@ static void freeroom(struct mkroom *rm) {
 
     assert(rm!=NULL);
     for(i=0; i<rm->nsubrooms; i++)
-	freeroom(rm->sbrooms[i]);
+        freeroom(rm->sbrooms[i]);
     free(rm);
 }
 
@@ -633,12 +633,12 @@ static void readrooms(void) {
 
     iread(&bones.nroom, sizeof(bones.nroom), intsz, NULL);
     if(bones.nroom > MAXNROFROOMS+1) { /* the +1 is for a vault, I think */
-	bones.nroom = 0;
-	bail(SEMANTIC_ERROR, "too many rooms");
+        bones.nroom = 0;
+        bail(SEMANTIC_ERROR, "too many rooms");
     }
 
     for(i=0; i<bones.nroom; i++)
-	bones.rooms[i] = readroom();
+        bones.rooms[i] = readroom();
 }
 
 
@@ -655,24 +655,24 @@ static void readtimers(void) {
 
     iread(&bones.ntimers, sizeof(bones.ntimers), intsz, NULL);
     for(i=0; i<bones.ntimers; i++) {
-	te = alloc(sizeof(timer_element));
-	te->next = te->arg = NULL;
-	if(bones.timer_base==NULL)
-	    bones.timer_base = tail = te;
-	else {
-	    tail->next = te;
-	    tail = te;
-	}
+        te = alloc(sizeof(timer_element));
+        te->next = te->arg = NULL;
+        if(bones.timer_base==NULL)
+            bones.timer_base = tail = te;
+        else {
+            tail->next = te;
+            tail = te;
+        }
 
-	st = startstruct(NULL, TRUE, longsz);
-	zread(&grot, pointersz, 1, st); /* te->next */
-	iread(&te->timeout, sizeof(te->timeout), longsz, st);
-	iread(&te->tid, sizeof(te->tid), longsz, st);
-	iread(&te->kind, sizeof(te->kind), SHORTSZ, st);
-	iread(&te->func_index, sizeof(te->func_index), SHORTSZ, st);
-	zread(&grot, pointersz, 1, st); /* te->arg  */
-	te->needs_fixup = bread(1, st);
-	endstruct(st);
+        st = startstruct(NULL, TRUE, longsz);
+        zread(&grot, pointersz, 1, st); /* te->next */
+        iread(&te->timeout, sizeof(te->timeout), longsz, st);
+        iread(&te->tid, sizeof(te->tid), longsz, st);
+        iread(&te->kind, sizeof(te->kind), SHORTSZ, st);
+        iread(&te->func_index, sizeof(te->func_index), SHORTSZ, st);
+        zread(&grot, pointersz, 1, st); /* te->arg  */
+        te->needs_fixup = bread(1, st);
+        endstruct(st);
 
     }
 }
@@ -691,24 +691,24 @@ static void readlights(void) {
 
     iread(&bones.nlights, sizeof(bones.nlights), intsz, NULL);
     for(i=0; i<bones.nlights; i++) {
-	ls = alloc(sizeof(light_source));
-	ls->next = ls->id = NULL;
-	if(bones.light_base==NULL)
-	    bones.light_base = tail = ls;
-	else {
-	    tail->next = ls;
-	    tail = ls;
-	}
+        ls = alloc(sizeof(light_source));
+        ls->next = ls->id = NULL;
+        if(bones.light_base==NULL)
+            bones.light_base = tail = ls;
+        else {
+            tail->next = ls;
+            tail = ls;
+        }
 
-	st = startstruct(NULL, TRUE, pointersz);
-	zread(&grot, pointersz, 1, st); /* ls->next */
-	iread(&ls->x, sizeof(ls->x), CHARSZ, st);
-	iread(&ls->y, sizeof(ls->y), CHARSZ, st);
-	iread(&ls->range, sizeof(ls->range), SHORTSZ, st);
-	iread(&ls->flags, sizeof(ls->flags), SHORTSZ, st);
-	iread(&ls->type, sizeof(ls->type), SHORTSZ, st);
-	zread(&grot, pointersz, 1, st); /* ls->id */
-	endstruct(st);
+        st = startstruct(NULL, TRUE, pointersz);
+        zread(&grot, pointersz, 1, st); /* ls->next */
+        iread(&ls->x, sizeof(ls->x), CHARSZ, st);
+        iread(&ls->y, sizeof(ls->y), CHARSZ, st);
+        iread(&ls->range, sizeof(ls->range), SHORTSZ, st);
+        iread(&ls->flags, sizeof(ls->flags), SHORTSZ, st);
+        iread(&ls->type, sizeof(ls->type), SHORTSZ, st);
+        zread(&grot, pointersz, 1, st); /* ls->id */
+        endstruct(st);
     }
 }
 
@@ -729,17 +729,17 @@ static void readmonsters(void) {
     iread(&bones.monbegin, sizeof(bones.monbegin), pointersz, NULL);
 
     while(xl>=0) { /* non-constant expression to please lint */
-	iread(&xl, sizeof(xl), intsz, NULL);
-	if(xl == -1)
-	    break;
+        iread(&xl, sizeof(xl), intsz, NULL);
+        if(xl == -1)
+            break;
 
-	m = readmonster(xl, TRUE);
-	if(bones.monchn==NULL)
-	    bones.monchn = tail = m;
-	else {
-	    tail->nmon = m;
-	    tail = m;
-	}
+        m = readmonster(xl, TRUE);
+        if(bones.monchn==NULL)
+            bones.monchn = tail = m;
+        else {
+            tail->nmon = m;
+            tail = m;
+        }
     }
 }
 
@@ -773,7 +773,7 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     iread(&m->mnum, sizeof(m->mnum), SHORTSZ, st);
 
     if(bones.header.incarnation >= 0x03030000)
-	iread(&m->movement, sizeof(m->movement), SHORTSZ, st);
+        iread(&m->movement, sizeof(m->movement), SHORTSZ, st);
 
     iread(&m->m_lev, sizeof(m->m_lev), CHARSZ, st);
     iread(&m->malign, sizeof(m->malign), CHARSZ, st);
@@ -783,7 +783,7 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     iread(&m->muy, sizeof(m->muy), CHARSZ, st);
 
     for(i=0; i<MTSZ; i++)
-	readcoord(st, &m->mtrack[i]);
+        readcoord(st, &m->mtrack[i]);
 
     iread(&m->mhp, sizeof(m->mhp), intsz, st);
     iread(&m->mhpmax, sizeof(m->mhpmax), intsz, st);
@@ -798,9 +798,9 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     m->perminvis = bread(1, st);
 
     if(bones.header.incarnation < 0x03030000)
-	m->cham = bread(1, st);
+        m->cham = bread(1, st);
     else
-	m->cham = bread(3, st);
+        m->cham = bread(3, st);
 
     m->mundetected = bread(1, st);
     m->mcan = bread(1, st);
@@ -809,8 +809,8 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     m->permspeed = bread(2, st);
 
     if(bones.header.incarnation >= 0x03030000) {
-	m->mrevived = bread(1, st);
-	m->mavenge = bread(1, st); /* was called "not_used" before 3.4.0 */
+        m->mrevived = bread(1, st);
+        m->mavenge = bread(1, st); /* was called "not_used" before 3.4.0 */
     }
 
     m->mflee = bread(1, st);
@@ -835,16 +835,16 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     iread(&m->mtrapseen, sizeof(m->mtrapseen), longsz, st);
     iread(&m->mlstmv, sizeof(m->mlstmv), longsz, st);
 
-     /* GOLDOBJ feature first appeared in 3.4.0 */
+    /* GOLDOBJ feature first appeared in 3.4.0 */
     if(!goldobj || bones.header.incarnation < 0x03040000)
-	iread(&m->mgold, sizeof(m->mgold), longsz, st);
+        iread(&m->mgold, sizeof(m->mgold), longsz, st);
 
     zread(&grot, pointersz, 1, st); /* m->minvent */
     if(grot)
-	hasinventory = TRUE;
+        hasinventory = TRUE;
     zread(&grot, pointersz, 1, st); /* m->mw */
     if(grot)
-	hasweapon = TRUE;
+        hasweapon = TRUE;
 
     iread(&m->misc_worn_check, sizeof(m->misc_worn_check), longsz, st);
     iread(&m->weapon_check, sizeof(m->weapon_check), CHARSZ, st);
@@ -852,7 +852,7 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     iread(&m->mxlth, sizeof(m->mxlth), SHORTSZ, st);
 
     if(m->mnamelth+m->mxlth != xl)
-	bail(SEMANTIC_ERROR, "bogus mextra byte count");
+        bail(SEMANTIC_ERROR, "bogus mextra byte count");
 
     iread(&m->meating, sizeof(m->meating), intsz, st);
     align(st, longsz); /* align for m->mextra, but it's not really here */
@@ -863,35 +863,35 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
 
     /* read mextra info */
     if(m->mxlth) {
-	assert(egdsz>0);
-	assert(eprisz>0);
-	assert(eshksz>0);
-	assert(eminsz>0);
-	assert(edogsz>0);
+        assert(egdsz>0);
+        assert(eprisz>0);
+        assert(eshksz>0);
+        assert(eminsz>0);
+        assert(edogsz>0);
 
-	if((unsigned) m->mxlth == egdsz) /* m->isgd */
-	    m->egd = readguard();
-	else if((unsigned) m->mxlth == eprisz) /* m->ispriest */
-	    m->epri = readpriest();
-	else if((unsigned) m->mxlth == eshksz) /* m->isshk */
-	    m->eshk = readshopkeeper();
-	else if((unsigned) m->mxlth == eminsz) /* m->isminion */
-	    m->emin = readminion();
-	else if((unsigned) m->mxlth == edogsz) /* m->mtame */
-	    m->edog = readdog();
-	else if(m->mxlth==PL_NSIZ && bones.header.incarnation<0x03030000) {
-	    m->ghostname = alloc(PL_NSIZ);
-	    zread(m->ghostname, 1, PL_NSIZ, NULL);
-	    teststring(m->ghostname, PL_NSIZ);
-	} else
-	    bail(SEMANTIC_ERROR, "unexpected mxlth");
+        if((unsigned) m->mxlth == egdsz) /* m->isgd */
+            m->egd = readguard();
+        else if((unsigned) m->mxlth == eprisz) /* m->ispriest */
+            m->epri = readpriest();
+        else if((unsigned) m->mxlth == eshksz) /* m->isshk */
+            m->eshk = readshopkeeper();
+        else if((unsigned) m->mxlth == eminsz) /* m->isminion */
+            m->emin = readminion();
+        else if((unsigned) m->mxlth == edogsz) /* m->mtame */
+            m->edog = readdog();
+        else if(m->mxlth==PL_NSIZ && bones.header.incarnation<0x03030000) {
+            m->ghostname = alloc(PL_NSIZ);
+            zread(m->ghostname, 1, PL_NSIZ, NULL);
+            teststring(m->ghostname, PL_NSIZ);
+        } else
+            bail(SEMANTIC_ERROR, "unexpected mxlth");
     }
 
     /* read monster's name */
     if(m->mnamelth) {
-	m->mname = alloc(m->mnamelth);
-	zread(m->mname, 1, m->mnamelth, NULL);
-	teststring(m->mname, m->mnamelth);
+        m->mname = alloc(m->mnamelth);
+        zread(m->mname, 1, m->mnamelth, NULL);
+        teststring(m->mname, m->mnamelth);
     }
 
     /* read in mextra, value is unimportant, it was just a placeholder */
@@ -899,9 +899,9 @@ static struct monst *readmonster(int32 xl, boolean readinv) {
     endstruct(st);
 
     if(hasinventory && readinv)
-	m->minvent = readobjects(FALSE);
+        m->minvent = readobjects(FALSE);
     if(hasweapon && readinv)
-	xl = xl; /* lookup pointer from object chain */
+        xl = xl; /* lookup pointer from object chain */
 
     return m;
 }
@@ -916,23 +916,23 @@ static void freemonsters(struct monst *m) {
     assert(m!=NULL);
 
     if(m->egd != NULL)
-	free(m->egd);
+        free(m->egd);
     if(m->epri != NULL)
-	free(m->epri);
+        free(m->epri);
     if(m->eshk != NULL)
-	free(m->eshk);
+        free(m->eshk);
     if(m->emin != NULL)
-	free(m->emin);
+        free(m->emin);
     if(m->edog != NULL)
-	free(m->edog);
+        free(m->edog);
     if(m->mname != NULL)
-	free(m->mname);
+        free(m->mname);
     if(m->ghostname != NULL)
-	free(m->ghostname);
+        free(m->ghostname);
     if(m->minvent != NULL)
-	freeobjects(m->minvent);
+        freeobjects(m->minvent);
     if(m->nmon != NULL)
-	freemonsters(m->nmon);
+        freemonsters(m->nmon);
     free(m);
 }
 
@@ -982,17 +982,17 @@ static void structsizes(void) {
     freemonsters(p);
 
     if(bones.header.incarnation >= 0x03020100) {
-	unsigned objsz;
+        unsigned objsz;
 
-	if(monstsz != bones.monstsz)
-	    bail(SEMANTIC_ERROR, "struct monst is wrong size");
+        if(monstsz != bones.monstsz)
+            bail(SEMANTIC_ERROR, "struct monst is wrong size");
 
-	startcount();
-	p = readobjects(TRUE);
-	objsz = getcount();
-	freeobjects(p);
-	if(objsz != bones.objsz)
-	    bail(SEMANTIC_ERROR, "struct obj is wrong size");
+        startcount();
+        p = readobjects(TRUE);
+        objsz = getcount();
+        freeobjects(p);
+        if(objsz != bones.objsz)
+            bail(SEMANTIC_ERROR, "struct obj is wrong size");
     }
 }
 
@@ -1013,7 +1013,7 @@ static struct egd *readguard(void) {
     iread(&egd->fcend, sizeof(egd->fcend), intsz, st);
 
     if(bones.header.incarnation >= 0x03020100)
-	iread(&egd->vroom, sizeof(egd->vroom), intsz, st);
+        iread(&egd->vroom, sizeof(egd->vroom), intsz, st);
 
     iread(&egd->gdx, sizeof(egd->gdx), CHARSZ, st);
     iread(&egd->gdy, sizeof(egd->gdy), CHARSZ, st);
@@ -1023,16 +1023,16 @@ static struct egd *readguard(void) {
     iread(&egd->warncnt, sizeof(egd->warncnt), CHARSZ, st);
 
     if(bones.header.incarnation < 0x03020100)
-	iread(&egd->vroom, sizeof(egd->vroom), intsz, st);
+        iread(&egd->vroom, sizeof(egd->vroom), intsz, st);
 
     egd->gddone = bread(1, st);
     egd->unused = bread(7, st);
     for(i=0; i<FCSIZ; i++) {
-	struct_t *st2 = startstruct(st, FALSE, CHARSZ);
-	iread(&egd->fakecorr[i].fx, sizeof(egd->fakecorr[i].fx), CHARSZ, st2);
-	iread(&egd->fakecorr[i].fy, sizeof(egd->fakecorr[i].fy), CHARSZ, st2);
-	iread(&egd->fakecorr[i].ftyp,sizeof(egd->fakecorr[i].ftyp),CHARSZ,st2);
-	endstruct(st2);
+        struct_t *st2 = startstruct(st, FALSE, CHARSZ);
+        iread(&egd->fakecorr[i].fx, sizeof(egd->fakecorr[i].fx), CHARSZ, st2);
+        iread(&egd->fakecorr[i].fy, sizeof(egd->fakecorr[i].fy), CHARSZ, st2);
+        iread(&egd->fakecorr[i].ftyp,sizeof(egd->fakecorr[i].ftyp),CHARSZ,st2);
+        endstruct(st2);
     }
     endstruct(st);
 
@@ -1084,7 +1084,7 @@ static struct eshk *readshopkeeper(void) {
     iread(&eshk->shoproom, sizeof(eshk->shoproom), CHARSZ, st);
 
     if(bones.header.incarnation >= 0x03020100)
-	iread(&eshk->unused, sizeof(eshk->unused), CHARSZ, st);
+        iread(&eshk->unused, sizeof(eshk->unused), CHARSZ, st);
 
     iread(&eshk->following, sizeof(eshk->following), CHARSZ, st);
     iread(&eshk->surcharge, sizeof(eshk->surcharge), CHARSZ, st);
@@ -1093,12 +1093,12 @@ static struct eshk *readshopkeeper(void) {
     readdlevel(st, &eshk->shoplevel);
     iread(&eshk->billct, sizeof(eshk->billct), intsz, st);
     for(i=0; i<BILLSZ; i++) {
-	st2 = startstruct(st, FALSE, longsz);
-	iread(&eshk->bill[i].bo_id, sizeof(eshk->bill[i].bo_id), intsz, st2);
-	iread(&eshk->bill[i].useup, sizeof(eshk->bill[i].useup), CHARSZ, st2);
-	iread(&eshk->bill[i].price, sizeof(eshk->bill[i].price), longsz, st2);
-	iread(&eshk->bill[i].bquan, sizeof(eshk->bill[i].bquan), longsz, st2);
-	endstruct(st2);
+        st2 = startstruct(st, FALSE, longsz);
+        iread(&eshk->bill[i].bo_id, sizeof(eshk->bill[i].bo_id), intsz, st2);
+        iread(&eshk->bill[i].useup, sizeof(eshk->bill[i].useup), CHARSZ, st2);
+        iread(&eshk->bill[i].price, sizeof(eshk->bill[i].price), longsz, st2);
+        iread(&eshk->bill[i].bquan, sizeof(eshk->bill[i].bquan), longsz, st2);
+        endstruct(st2);
     }
     /* Bizarrely, sometimes bill_p is set to -1000. Need to figure out why. */
     iread(&grot, sizeof(grot), pointersz, st); /* eshk->bill_p */
@@ -1150,11 +1150,11 @@ static struct edog *readdog(void) {
     readcoord(st, &edog->ogoal);
 
     if(bones.header.incarnation >= 0x03030000) {
-	iread(&edog->abuse, sizeof(edog->abuse), intsz, st);
-	iread(&edog->revivals, sizeof(edog->revivals), intsz, st);
-	if(bones.header.incarnation >= 0x03030100)
-	    iread(&edog->mhpmax_penalty, sizeof(edog->mhpmax_penalty), intsz, st);
-	edog->killed_by_u = bread(1, st);
+        iread(&edog->abuse, sizeof(edog->abuse), intsz, st);
+        iread(&edog->revivals, sizeof(edog->revivals), intsz, st);
+        if(bones.header.incarnation >= 0x03030100)
+            iread(&edog->mhpmax_penalty, sizeof(edog->mhpmax_penalty), intsz, st);
+        edog->killed_by_u = bread(1, st);
     }
     endstruct(st);
 
@@ -1172,131 +1172,131 @@ static struct obj *readobjects(boolean counting) {
     int32 xl=0; /* number of extra bytes after struct obj */
 
     while(xl>=0) { /* non-constant expression to please lint */
-	struct_t *st;
-	boolean hascontents = FALSE;
-	uint32 grot;
+        struct_t *st;
+        boolean hascontents = FALSE;
+        uint32 grot;
 
-	iread(&xl, sizeof(xl), intsz, NULL);
-	if(xl == -1)
-	    break;
+        iread(&xl, sizeof(xl), intsz, NULL);
+        if(xl == -1)
+            break;
 
-	obj = alloc(sizeof(struct obj));
-	obj->nobj = obj->vptr = obj->cobj = NULL;
-	obj->monst = NULL;
-	obj->oname = NULL;
-	if(head==NULL)
-	    head = tail = obj;
-	else {
-	    tail->nobj = obj;
-	    tail = obj;
-	}
+        obj = alloc(sizeof(struct obj));
+        obj->nobj = obj->vptr = obj->cobj = NULL;
+        obj->monst = NULL;
+        obj->oname = NULL;
+        if(head==NULL)
+            head = tail = obj;
+        else {
+            tail->nobj = obj;
+            tail = obj;
+        }
 
-	st = startstruct(NULL, TRUE, longsz);
-	zread(&grot, pointersz, 1, st); /* obj->nobj */
-	zread(&grot, pointersz, 1, st); /* obj->vptr */
-	zread(&grot, pointersz, 1, st); /* obj->cobj */
-	if(grot)
-	    hascontents = TRUE;
-	iread(&obj->o_id, sizeof(obj->o_id), intsz, st);
-	iread(&obj->ox, sizeof(obj->ox), CHARSZ, st);
-	iread(&obj->oy, sizeof(obj->oy), CHARSZ, st);
-	iread(&obj->otyp, sizeof(obj->otyp), SHORTSZ, st);
-	iread(&obj->owt, sizeof(obj->owt), intsz, st);
-	iread(&obj->quan, sizeof(obj->quan), longsz, st);
-	iread(&obj->spe, sizeof(obj->spe), CHARSZ, st);
-	iread(&obj->oclass, sizeof(obj->oclass), CHARSZ, st);
-	iread(&obj->invlet, sizeof(obj->invlet), CHARSZ, st);
-	iread(&obj->oartifact, sizeof(obj->oartifact), CHARSZ, st);
-	iread(&obj->where, sizeof(obj->where), CHARSZ, st);
-	iread(&obj->timed, sizeof(obj->timed), CHARSZ, st);
-	obj->cursed = bread(1, st);
-	obj->blessed = bread(1, st);
-	obj->unpaid = bread(1, st);
-	obj->no_charge = bread(1, st);
-	obj->known = bread(1, st);
-	obj->dknown = bread(1, st);
-	obj->bknown = bread(1, st);
-	obj->rknown = bread(1, st);
-	obj->oeroded = bread(2, st);
+        st = startstruct(NULL, TRUE, longsz);
+        zread(&grot, pointersz, 1, st); /* obj->nobj */
+        zread(&grot, pointersz, 1, st); /* obj->vptr */
+        zread(&grot, pointersz, 1, st); /* obj->cobj */
+        if(grot)
+            hascontents = TRUE;
+        iread(&obj->o_id, sizeof(obj->o_id), intsz, st);
+        iread(&obj->ox, sizeof(obj->ox), CHARSZ, st);
+        iread(&obj->oy, sizeof(obj->oy), CHARSZ, st);
+        iread(&obj->otyp, sizeof(obj->otyp), SHORTSZ, st);
+        iread(&obj->owt, sizeof(obj->owt), intsz, st);
+        iread(&obj->quan, sizeof(obj->quan), longsz, st);
+        iread(&obj->spe, sizeof(obj->spe), CHARSZ, st);
+        iread(&obj->oclass, sizeof(obj->oclass), CHARSZ, st);
+        iread(&obj->invlet, sizeof(obj->invlet), CHARSZ, st);
+        iread(&obj->oartifact, sizeof(obj->oartifact), CHARSZ, st);
+        iread(&obj->where, sizeof(obj->where), CHARSZ, st);
+        iread(&obj->timed, sizeof(obj->timed), CHARSZ, st);
+        obj->cursed = bread(1, st);
+        obj->blessed = bread(1, st);
+        obj->unpaid = bread(1, st);
+        obj->no_charge = bread(1, st);
+        obj->known = bread(1, st);
+        obj->dknown = bread(1, st);
+        obj->bknown = bread(1, st);
+        obj->rknown = bread(1, st);
+        obj->oeroded = bread(2, st);
 
-	if(bones.header.incarnation >= 0x03030000)
-	    obj->oeroded2 = bread(2, st);
+        if(bones.header.incarnation >= 0x03030000)
+            obj->oeroded2 = bread(2, st);
 
-	obj->oerodeproof = bread(1, st);
-	obj->olocked = bread(1, st);
-	obj->obroken = bread(1, st);
-	obj->otrapped = bread(1, st);
+        obj->oerodeproof = bread(1, st);
+        obj->olocked = bread(1, st);
+        obj->obroken = bread(1, st);
+        obj->otrapped = bread(1, st);
 
-	if(!nosignal && bones.header.incarnation < 0x03030000)
-	    obj->in_use = bread(1, st);
+        if(!nosignal && bones.header.incarnation < 0x03030000)
+            obj->in_use = bread(1, st);
 
-	if(bones.header.incarnation >= 0x03030000)
-	    obj->recharged = bread(3, st);
+        if(bones.header.incarnation >= 0x03030000)
+            obj->recharged = bread(3, st);
 
-	obj->lamplit = bread(1, st);
+        obj->lamplit = bread(1, st);
 
-	if(invisibleobjects || bones.header.incarnation < 0x03030000)
-	    obj->oinvis = bread(1, st);
+        if(invisibleobjects || bones.header.incarnation < 0x03030000)
+            obj->oinvis = bread(1, st);
 
-	obj->greased = bread(1, st);
+        obj->greased = bread(1, st);
 
-	if(bones.header.incarnation >= 0x03030000)
-	    obj->oattached = bread(2, st);
-	else if(bones.header.incarnation >= 0x03020100)
-	    obj->oattached = bread(1, st); /* was called "mtraits" */
-	else
-	    obj->onamelth = (uint8) bread(6, st);
+        if(bones.header.incarnation >= 0x03030000)
+            obj->oattached = bread(2, st);
+        else if(bones.header.incarnation >= 0x03020100)
+            obj->oattached = bread(1, st); /* was called "mtraits" */
+        else
+            obj->onamelth = (uint8) bread(6, st);
 
-	if(bones.header.incarnation >= 0x03030000)
-	    obj->in_use = bread(1, st);
+        if(bones.header.incarnation >= 0x03030000)
+            obj->in_use = bread(1, st);
 
-	if(bones.header.incarnation >= 0x03040000)
-	    obj->bypass = bread(1, st);
+        if(bones.header.incarnation >= 0x03040000)
+            obj->bypass = bread(1, st);
 
-	iread(&obj->corpsenm, sizeof(obj->corpsenm), intsz, st);
-	iread(&obj->oeaten, sizeof(obj->oeaten), intsz, st);
-	iread(&obj->age, sizeof(obj->age), longsz, st);
+        iread(&obj->corpsenm, sizeof(obj->corpsenm), intsz, st);
+        iread(&obj->oeaten, sizeof(obj->oeaten), intsz, st);
+        iread(&obj->age, sizeof(obj->age), longsz, st);
 
-	if(bones.header.incarnation >= 0x03020100) {
-	    iread(&obj->onamelth, sizeof(obj->onamelth), CHARSZ, st);
-	    iread(&obj->oxlth, sizeof(obj->oxlth), SHORTSZ, st);
-	}
+        if(bones.header.incarnation >= 0x03020100) {
+            iread(&obj->onamelth, sizeof(obj->onamelth), CHARSZ, st);
+            iread(&obj->oxlth, sizeof(obj->oxlth), SHORTSZ, st);
+        }
 
-	if(obj->onamelth+obj->oxlth != xl)
-	    bail(SEMANTIC_ERROR, "bogus oextra byte count");
+        if(obj->onamelth+obj->oxlth != xl)
+            bail(SEMANTIC_ERROR, "bogus oextra byte count");
 
-	iread(&obj->owornmask, sizeof(obj->owornmask), longsz, st);
-	align(st, longsz); /* align for oextra, but it's not really here */
+        iread(&obj->owornmask, sizeof(obj->owornmask), longsz, st);
+        align(st, longsz); /* align for oextra, but it's not really here */
 
-	/* read oextra data */
-	if(obj->oxlth) {
-	    assert(monstsz>0);
-	    if((unsigned) obj->oxlth == intsz) /* OATTACHED_M_ID */
-		iread(&obj->m_id, sizeof(obj->m_id), intsz, NULL);
-	    else if((unsigned) obj->oxlth >= monstsz) { /* OATTACHED_MONST */
-		obj->monst = readmonster(obj->oxlth - monstsz, FALSE);
-		/* clear possible bogus pointers */
-		obj->monst->minvent = obj->monst->mw = NULL;
-	    } else
-		bail(SEMANTIC_ERROR, "unexpected oxlth");
-	}
+        /* read oextra data */
+        if(obj->oxlth) {
+            assert(monstsz>0);
+            if((unsigned) obj->oxlth == intsz) /* OATTACHED_M_ID */
+                iread(&obj->m_id, sizeof(obj->m_id), intsz, NULL);
+            else if((unsigned) obj->oxlth >= monstsz) { /* OATTACHED_MONST */
+                obj->monst = readmonster(obj->oxlth - monstsz, FALSE);
+                /* clear possible bogus pointers */
+                obj->monst->minvent = obj->monst->mw = NULL;
+            } else
+                bail(SEMANTIC_ERROR, "unexpected oxlth");
+        }
 
-	/* read name */
-	if(obj->onamelth) {
-	    obj->oname = alloc(obj->onamelth);
-	    zread(obj->oname, 1, obj->onamelth, NULL);
-	    teststring(obj->oname, obj->onamelth);
-	}
+        /* read name */
+        if(obj->onamelth) {
+            obj->oname = alloc(obj->onamelth);
+            zread(obj->oname, 1, obj->onamelth, NULL);
+            teststring(obj->oname, obj->onamelth);
+        }
 
-	/* read in oextra, value is unimportant, it was just a placeholder */
-	iread(&obj->oextra[0], sizeof(obj->oextra[0]), longsz, st);
-	endstruct(st);
+        /* read in oextra, value is unimportant, it was just a placeholder */
+        iread(&obj->oextra[0], sizeof(obj->oextra[0]), longsz, st);
+        endstruct(st);
 
-	if(hascontents)
-	    obj->cobj = readobjects(FALSE);
+        if(hascontents)
+            obj->cobj = readobjects(FALSE);
 
-	if(counting)
-	    break;
+        if(counting)
+            break;
     }
 
     return head;
@@ -1311,13 +1311,13 @@ static struct obj *readobjects(boolean counting) {
 static void freeobjects(struct obj *obj) {
     assert(obj != NULL);
     if(obj->monst != NULL)
-	freemonsters(obj->monst);
+        freemonsters(obj->monst);
     if(obj->oname !=NULL)
-	free(obj->oname);
+        free(obj->oname);
     if(obj->cobj != NULL)
-	freeobjects(obj->cobj);
+        freeobjects(obj->cobj);
     if(obj->nobj != NULL)
-	freeobjects(obj->nobj);
+        freeobjects(obj->nobj);
     free(obj);
 }
 
@@ -1333,26 +1333,26 @@ static void readworms(void) {
 
     bones.wsegments[0] = NULL; /* set to NULL just to be tidy */
     for(i=1; i<MAX_NUM_WORMS; i++) { /* wsegments[0] is unused */
-	bones.wsegments[i] = NULL;
+        bones.wsegments[i] = NULL;
 
-	iread(&nsegs, sizeof(nsegs), intsz, NULL);
-	while(nsegs--) {
-	    wseg = alloc(sizeof(struct wseg));
-	    wseg->nseg = NULL;
-	    if(bones.wsegments[i] == NULL)
-		bones.wsegments[i] = tail = wseg;
-	    else {
-		tail->nseg = wseg;
-		tail = wseg;
-	    }
+        iread(&nsegs, sizeof(nsegs), intsz, NULL);
+        while(nsegs--) {
+            wseg = alloc(sizeof(struct wseg));
+            wseg->nseg = NULL;
+            if(bones.wsegments[i] == NULL)
+                bones.wsegments[i] = tail = wseg;
+            else {
+                tail->nseg = wseg;
+                tail = wseg;
+            }
 
-	    iread(&wseg->wx, sizeof(wseg->wx), CHARSZ, NULL);
-	    iread(&wseg->wy, sizeof(wseg->wy), CHARSZ, NULL);
-	}
+            iread(&wseg->wx, sizeof(wseg->wx), CHARSZ, NULL);
+            iread(&wseg->wy, sizeof(wseg->wy), CHARSZ, NULL);
+        }
     }
 
     for(i=0; i<MAX_NUM_WORMS; i++) /* read whole array, even wgrowtime[0] */
-	iread(&bones.wgrowtime[i], sizeof(bones.wgrowtime[i]), longsz, NULL);
+        iread(&bones.wgrowtime[i], sizeof(bones.wgrowtime[i]), longsz, NULL);
 }
 
 
@@ -1367,35 +1367,35 @@ static void readtraps(void) {
     uint32 grot;
 
     do { /* read traps until a we find struct filled with zeros */
-	t = alloc(sizeof(struct trap));
-	t->ntrap = NULL;
+        t = alloc(sizeof(struct trap));
+        t->ntrap = NULL;
 
-	st = startstruct(NULL, TRUE, pointersz);
-	zread(&grot, pointersz, 1, st); /* t->ntrap */
-	iread(&t->tx, sizeof(t->tx), CHARSZ, st);
-	iread(&t->ty, sizeof(t->tx), CHARSZ, st);
-	readdlevel(st, &t->dst);
-	readcoord(st, &t->launch);
-	t->ttyp = bread(5, st);
-	t->tseen = bread(1, st);
-	t->once = bread(1, st);
-	t->madeby_u = bread(1, st);
+        st = startstruct(NULL, TRUE, pointersz);
+        zread(&grot, pointersz, 1, st); /* t->ntrap */
+        iread(&t->tx, sizeof(t->tx), CHARSZ, st);
+        iread(&t->ty, sizeof(t->tx), CHARSZ, st);
+        readdlevel(st, &t->dst);
+        readcoord(st, &t->launch);
+        t->ttyp = bread(5, st);
+        t->tseen = bread(1, st);
+        t->once = bread(1, st);
+        t->madeby_u = bread(1, st);
 
-	/* launch2 and launch_otyp are the same size, see structsizes() */
-	if(t->ttyp == ROLLING_BOULDER_TRAP)
-	    readcoord(st, &t->launch2);
-	else
-	    iread(&t->launch_otyp, sizeof(t->launch_otyp), SHORTSZ, st);
-	endstruct(st);
+        /* launch2 and launch_otyp are the same size, see structsizes() */
+        if(t->ttyp == ROLLING_BOULDER_TRAP)
+            readcoord(st, &t->launch2);
+        else
+            iread(&t->launch_otyp, sizeof(t->launch_otyp), SHORTSZ, st);
+        endstruct(st);
 
-	if(t->tx) { /* not the sentinel, add it to the list */
-	    if(bones.trapchn==NULL)
-		bones.trapchn = tail = t;
-	    else {
-		tail->ntrap = t;
-		tail = t;
-	    }
-	}
+        if(t->tx) { /* not the sentinel, add it to the list */
+            if(bones.trapchn==NULL)
+                bones.trapchn = tail = t;
+            else {
+                tail->ntrap = t;
+                tail = t;
+            }
+        }
     } while(t->tx);
 
     free(t); /* free the sentinel struct */
@@ -1413,39 +1413,39 @@ static void readengravings(void) {
     uint32 grot, len=0;
 
     while(len>=0) { /* non-constant expression to please lint */
-	iread(&len, sizeof(len), intsz, NULL);
-	if(len == 0)
-	    break;
+        iread(&len, sizeof(len), intsz, NULL);
+        if(len == 0)
+            break;
 
-	if(len > BUFSZ)
-	    bail(SEMANTIC_ERROR, "engraving is too long");
+        if(len > BUFSZ)
+            bail(SEMANTIC_ERROR, "engraving is too long");
 
-	e = alloc(sizeof(struct engr));
-	e->nxt_engr = NULL;
-	e->engr_txt = NULL;
-	if(bones.engravings==NULL)
-	    bones.engravings = tail = e;
-	else {
-	    tail->nxt_engr = e;
-	    tail = e;
-	}
+        e = alloc(sizeof(struct engr));
+        e->nxt_engr = NULL;
+        e->engr_txt = NULL;
+        if(bones.engravings==NULL)
+            bones.engravings = tail = e;
+        else {
+            tail->nxt_engr = e;
+            tail = e;
+        }
 
-	st = startstruct(NULL, FALSE, longsz);
-	zread(&grot, pointersz, 1, st); /* e->nxt_engr */
-	zread(&grot, pointersz, 1, st); /* e->engr_txt */
-	iread(&e->engr_x, sizeof(e->engr_x), CHARSZ, st);
-	iread(&e->engr_y, sizeof(e->engr_y), CHARSZ, st);
-	iread(&e->engr_lth, sizeof(e->engr_lth), intsz, st);
-	if(e->engr_lth != len)
-	    bail(SEMANTIC_ERROR, "bogus engr_lth");
-	iread(&e->engr_time, sizeof(e->engr_time), longsz, st);
-	iread(&e->engr_type, sizeof(e->engr_type), CHARSZ, st);
-	endstruct(st);
+        st = startstruct(NULL, FALSE, longsz);
+        zread(&grot, pointersz, 1, st); /* e->nxt_engr */
+        zread(&grot, pointersz, 1, st); /* e->engr_txt */
+        iread(&e->engr_x, sizeof(e->engr_x), CHARSZ, st);
+        iread(&e->engr_y, sizeof(e->engr_y), CHARSZ, st);
+        iread(&e->engr_lth, sizeof(e->engr_lth), intsz, st);
+        if(e->engr_lth != len)
+            bail(SEMANTIC_ERROR, "bogus engr_lth");
+        iread(&e->engr_time, sizeof(e->engr_time), longsz, st);
+        iread(&e->engr_type, sizeof(e->engr_type), CHARSZ, st);
+        endstruct(st);
 
-	/* read engraving text */
-	e->engr_txt = alloc(e->engr_lth);
-	zread(e->engr_txt, 1, e->engr_lth, NULL);
-	teststring(e->engr_txt, e->engr_lth);
+        /* read engraving text */
+        e->engr_txt = alloc(e->engr_lth);
+        zread(e->engr_txt, 1, e->engr_lth, NULL);
+        teststring(e->engr_txt, e->engr_lth);
     }
 }
 
@@ -1462,22 +1462,22 @@ static void readdamage(void) {
 
     iread(&n, sizeof(n), intsz, NULL);
     while(n--) {
-	d = alloc(sizeof(struct damage));
-	d->next = NULL;
-	if(bones.damage==NULL)
-	    bones.damage = tail = d;
-	else {
-	    tail->next = d;
-	    tail = d;
-	}
+        d = alloc(sizeof(struct damage));
+        d->next = NULL;
+        if(bones.damage==NULL)
+            bones.damage = tail = d;
+        else {
+            tail->next = d;
+            tail = d;
+        }
 
-	st = startstruct(NULL, FALSE, longsz);
-	zread(&grot, pointersz, 1, st); /* d->next */
-	iread(&d->when, sizeof(d->when), longsz, st);
-	iread(&d->cost, sizeof(d->cost), longsz, st);
-	readcoord(st, &d->place);
-	iread(&d->typ, sizeof(d->typ), CHARSZ, st);
-	endstruct(st);
+        st = startstruct(NULL, FALSE, longsz);
+        zread(&grot, pointersz, 1, st); /* d->next */
+        iread(&d->when, sizeof(d->when), longsz, st);
+        iread(&d->cost, sizeof(d->cost), longsz, st);
+        readcoord(st, &d->place);
+        iread(&d->typ, sizeof(d->typ), CHARSZ, st);
+        endstruct(st);
 
     }
 }
@@ -1498,75 +1498,75 @@ static void readregions(void) {
     bones.regions = NULL;
     iread(&bones.nregions, sizeof(bones.nregions), intsz, NULL);
     if(bones.nregions)
-	bones.regions = alloc(sizeof(NhRegion *) * bones.nregions);
+        bones.regions = alloc(sizeof(NhRegion *) * bones.nregions);
 
     for(i=0; i<bones.nregions; i++) {
-	bones.regions[i] = alloc(sizeof(NhRegion *));
-	bones.regions[i]->rects = NULL;
-	bones.regions[i]->enter_msg = NULL;
-	bones.regions[i]->leave_msg = NULL;
-	bones.regions[i]->monsters = NULL;
+        bones.regions[i] = alloc(sizeof(NhRegion *));
+        bones.regions[i]->rects = NULL;
+        bones.regions[i]->enter_msg = NULL;
+        bones.regions[i]->leave_msg = NULL;
+        bones.regions[i]->monsters = NULL;
 
-	st = startstruct(NULL, FALSE, CHARSZ);
-	iread(&bones.regions[i]->bounding_box.lx, sizeof(int8), CHARSZ, st);
-	iread(&bones.regions[i]->bounding_box.ly, sizeof(int8), CHARSZ, st);
-	iread(&bones.regions[i]->bounding_box.hx, sizeof(int8), CHARSZ, st);
-	iread(&bones.regions[i]->bounding_box.hy, sizeof(int8), CHARSZ, st);
-	endstruct(st);
+        st = startstruct(NULL, FALSE, CHARSZ);
+        iread(&bones.regions[i]->bounding_box.lx, sizeof(int8), CHARSZ, st);
+        iread(&bones.regions[i]->bounding_box.ly, sizeof(int8), CHARSZ, st);
+        iread(&bones.regions[i]->bounding_box.hx, sizeof(int8), CHARSZ, st);
+        iread(&bones.regions[i]->bounding_box.hy, sizeof(int8), CHARSZ, st);
+        endstruct(st);
 
-	iread(&bones.regions[i]->nrects, sizeof(bones.regions[i]->nrects), SHORTSZ, NULL);
-	if(bones.regions[i]->nrects)
-	    bones.regions[i]->rects = alloc(sizeof(NhRect)*bones.regions[i]->nrects);
-	for(j=0; j<bones.regions[i]->nrects; j++) {
-	    st = startstruct(NULL, FALSE, CHARSZ);
-	    iread(&bones.regions[i]->rects[j].lx, sizeof(int8), CHARSZ, st);
-	    iread(&bones.regions[i]->rects[j].ly, sizeof(int8), CHARSZ, st);
-	    iread(&bones.regions[i]->rects[j].hx, sizeof(int8), CHARSZ, st);
-	    iread(&bones.regions[i]->rects[j].hy, sizeof(int8), CHARSZ, st);
-	    endstruct(st);
-	}
+        iread(&bones.regions[i]->nrects, sizeof(bones.regions[i]->nrects), SHORTSZ, NULL);
+        if(bones.regions[i]->nrects)
+            bones.regions[i]->rects = alloc(sizeof(NhRect)*bones.regions[i]->nrects);
+        for(j=0; j<bones.regions[i]->nrects; j++) {
+            st = startstruct(NULL, FALSE, CHARSZ);
+            iread(&bones.regions[i]->rects[j].lx, sizeof(int8), CHARSZ, st);
+            iread(&bones.regions[i]->rects[j].ly, sizeof(int8), CHARSZ, st);
+            iread(&bones.regions[i]->rects[j].hx, sizeof(int8), CHARSZ, st);
+            iread(&bones.regions[i]->rects[j].hy, sizeof(int8), CHARSZ, st);
+            endstruct(st);
+        }
 
-	iread(&bones.regions[i]->attach_2_u,sizeof(bones.regions[i]->attach_2_u),CHARSZ,NULL);
-	iread(&bones.regions[i]->attach_2_m,sizeof(bones.regions[i]->attach_2_m),intsz,NULL);
+        iread(&bones.regions[i]->attach_2_u,sizeof(bones.regions[i]->attach_2_u),CHARSZ,NULL);
+        iread(&bones.regions[i]->attach_2_m,sizeof(bones.regions[i]->attach_2_m),intsz,NULL);
 
-	iread(&n, sizeof(n), intsz, NULL);
-	if(n) {
-	    bones.regions[i]->enter_msg = alloc(n+1);
-	    zread(bones.regions[i]->enter_msg, CHARSZ, n, NULL);
-	    bones.regions[i]->enter_msg[n] = '\0';
-	    teststring(bones.regions[i]->enter_msg, n+1);
-	}
+        iread(&n, sizeof(n), intsz, NULL);
+        if(n) {
+            bones.regions[i]->enter_msg = alloc(n+1);
+            zread(bones.regions[i]->enter_msg, CHARSZ, n, NULL);
+            bones.regions[i]->enter_msg[n] = '\0';
+            teststring(bones.regions[i]->enter_msg, n+1);
+        }
 
-	iread(&n, sizeof(n), intsz, NULL);
-	if(n) {
-	    bones.regions[i]->leave_msg = alloc(n+1);
-	    zread(bones.regions[i]->leave_msg, CHARSZ, n, NULL);
-	    bones.regions[i]->leave_msg[n] = '\0';
-	    teststring(bones.regions[i]->leave_msg, n+1);
-	}
+        iread(&n, sizeof(n), intsz, NULL);
+        if(n) {
+            bones.regions[i]->leave_msg = alloc(n+1);
+            zread(bones.regions[i]->leave_msg, CHARSZ, n, NULL);
+            bones.regions[i]->leave_msg[n] = '\0';
+            teststring(bones.regions[i]->leave_msg, n+1);
+        }
 
-	iread(&bones.regions[i]->ttl, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->expire_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->can_enter_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->enter_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->can_leave_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->leave_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->inside_f, sizeof(int16), SHORTSZ, NULL);
-	iread(&bones.regions[i]->player_flags, sizeof(int8), CHARSZ, NULL);
+        iread(&bones.regions[i]->ttl, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->expire_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->can_enter_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->enter_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->can_leave_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->leave_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->inside_f, sizeof(int16), SHORTSZ, NULL);
+        iread(&bones.regions[i]->player_flags, sizeof(int8), CHARSZ, NULL);
 
-	iread(&bones.regions[i]->n_monst, sizeof(bones.regions[i]->n_monst),SHORTSZ,NULL);
-	if(bones.regions[i]->n_monst)
-	    bones.regions[i]->monsters = alloc(sizeof(uint32 *) * bones.regions[i]->n_monst);
+        iread(&bones.regions[i]->n_monst, sizeof(bones.regions[i]->n_monst),SHORTSZ,NULL);
+        if(bones.regions[i]->n_monst)
+            bones.regions[i]->monsters = alloc(sizeof(uint32 *) * bones.regions[i]->n_monst);
 
-	for(j=0; j<bones.regions[i]->n_monst; j++) {
-	    iread(&bones.regions[i]->monsters[j], sizeof(uint32), intsz, NULL);
-	}
-	bones.regions[i]->max_monst = bones.regions[i]->n_monst;
+        for(j=0; j<bones.regions[i]->n_monst; j++) {
+            iread(&bones.regions[i]->monsters[j], sizeof(uint32), intsz, NULL);
+        }
+        bones.regions[i]->max_monst = bones.regions[i]->n_monst;
 
-	iread(&bones.regions[i]->visible, sizeof(bones.regions[i]->visible), CHARSZ, NULL);
-	iread(&bones.regions[i]->glyph, sizeof(bones.regions[i]->glyph), intsz, NULL);
+        iread(&bones.regions[i]->visible, sizeof(bones.regions[i]->visible), CHARSZ, NULL);
+        iread(&bones.regions[i]->glyph, sizeof(bones.regions[i]->glyph), intsz, NULL);
 
-	/* arg is a genericptr_t, but is only ever used as (int) arg */
-	iread(&bones.regions[i]->arg, sizeof(bones.regions[i]->arg), pointersz, NULL);
+        /* arg is a genericptr_t, but is only ever used as (int) arg */
+        iread(&bones.regions[i]->arg, sizeof(bones.regions[i]->arg), pointersz, NULL);
     }
 }

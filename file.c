@@ -24,7 +24,7 @@ unsigned memberalign = 4; /* struct member alignment = min(x, member size) */
 unsigned structalign = 0; /* alignment of structs w/o bitfields 0 = by member */
 unsigned fieldalign = 0;  /* alignment of structs that contain bitfields */
 boolean fieldMSB;         /* bitfields start at MSB, not LSB */
-boolean fieldspan;	  /* bitfields can span bitfield units */
+boolean fieldspan;        /* bitfields can span bitfield units */
 
 boolean zerocomp;
 static uint8 nzeroes = 0; /* zeros in the run (for zero compression) */
@@ -48,7 +48,7 @@ void bopen(char *fname) {
     assert(fp == NULL);
 
     if((fp = fopen(fname, "rb")) == NULL)
-	bail(SYSTEM_ERROR, "unable to open file: %s", fname);
+        bail(SYSTEM_ERROR, "unable to open file: %s", fname);
 }
 
 
@@ -59,7 +59,7 @@ void bopen(char *fname) {
  */
 void bclose(void) {
     if(fp != NULL)
-	fclose(fp);
+        fclose(fp);
     fp = NULL;
 }
 
@@ -74,10 +74,10 @@ void testeof(void) {
 
     assert(fp != NULL);
     if(fread(&c, 1, 1, fp) || !feof(fp))
-	bail(SEMANTIC_ERROR, "extra junk at end of file");
+        bail(SEMANTIC_ERROR, "extra junk at end of file");
 
     if(nzeroes)
-	bail(SEMANTIC_ERROR, "file ends in middle of zerocomp run");
+        bail(SEMANTIC_ERROR, "file ends in middle of zerocomp run");
 }
 
 
@@ -126,16 +126,16 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
 
     /* adjust alignment for fieldsz and memberalign */
     if(hasfields && fieldsz>maxlen)
-	maxlen = fieldsz;
+        maxlen = fieldsz;
     if(memberalign<maxlen)
-	maxlen = memberalign;
+        maxlen = memberalign;
 
     /* adjust for structalign and fieldalign */
     /* probably need min and max values here. figure it out later */
     if(hasfields) {
-	st->align = (fieldalign>maxlen) ? fieldalign : maxlen;
+        st->align = (fieldalign>maxlen) ? fieldalign : maxlen;
     } else {
-	st->align = (structalign && structalign<maxlen) ? structalign : maxlen;
+        st->align = (structalign && structalign<maxlen) ? structalign : maxlen;
     }
 
     if(debug) {
@@ -148,8 +148,8 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     st->parent = parent;
 
     if(parent!=NULL) {
-	assert(parent->align >= st->align);
-	align(parent, st->align);
+        assert(parent->align >= st->align);
+        align(parent, st->align);
     }
 
     return st;
@@ -190,11 +190,11 @@ void align(struct_t *st, unsigned alignment) {
 
     while((st->nbytes) % alignment) {
         zread(&foo, 1, 1, NULL);
-	st->nbytes++;
-	/*
-	if(foo)
-	    bail(SEMANTIC_ERROR, "non-zero struct padding");
-	*/
+        st->nbytes++;
+        /*
+           if(foo)
+            bail(SEMANTIC_ERROR, "non-zero struct padding");
+         */
     }
 }
 
@@ -213,7 +213,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
     assert(num>0);
     assert(memberalign==1 || memberalign==2 || memberalign==4);
 
-     /* keep track of struct padding */
+    /* keep track of struct padding */
     if(st != NULL) {
         clearfield(st);
         align(st, (memberalign<len) ? memberalign : len);
@@ -266,47 +266,47 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
 
     switch(len) {
     case 1:
-	zread(&buf1, 1, 1, st);
-	val = buf1;
-	break;
+        zread(&buf1, 1, 1, st);
+        val = buf1;
+        break;
     case 2:
-	zread(&buf2, 2, 1, st);
-	if(switchbytes)
-	    buf2 = (uint16) (((buf2>>8)&0xff) | ((buf2&0xff)<<8));
-	val = buf2;
-	break;
+        zread(&buf2, 2, 1, st);
+        if(switchbytes)
+            buf2 = (uint16) (((buf2>>8)&0xff) | ((buf2&0xff)<<8));
+        val = buf2;
+        break;
     case 4:
-	zread(&buf4, 4, 1, st);
-	if(switchbytes)
-	    buf4 = (((buf4>>24)&0xff) | ((buf4&0xff)<<24) |
-		((buf4>>8)&0xff00) | ((buf4&0xff00)<<8));
-	val = buf4;
-    break;
+        zread(&buf4, 4, 1, st);
+        if(switchbytes)
+            buf4 = (((buf4>>24)&0xff) | ((buf4&0xff)<<24) |
+                    ((buf4>>8)&0xff00) | ((buf4&0xff00)<<8));
+        val = buf4;
+        break;
     case 8:
-	zread(&buf8, 8, 1, st);
-    if(switchbytes) {
-        /* (uint64)(ChangeEndianness32(value & 0xffffffff)) << 32 |
-                            ChangeEndianness32(value >> 32); */
-        buf8 = (((buf8>>56)&0xff) | ((buf8&0xff)<<56) |
-        ((buf8>>40)&0xff00) | ((buf8&0xff00)<<40) |
-        ((buf8>>24)&0xff0000) | ((buf8&0xff0000)<<24) |
-        ((buf8>>8)&0xff000000) | ((buf8&0xff000000)<<8));
-    }
-	val = buf8;
+        zread(&buf8, 8, 1, st);
+        if(switchbytes) {
+            /* (uint64)(ChangeEndianness32(value & 0xffffffff)) << 32 |
+                                ChangeEndianness32(value >> 32); */
+            buf8 = (((buf8>>56)&0xff) | ((buf8&0xff)<<56) |
+                    ((buf8>>40)&0xff00) | ((buf8&0xff00)<<40) |
+                    ((buf8>>24)&0xff0000) | ((buf8&0xff0000)<<24) |
+                    ((buf8>>8)&0xff000000) | ((buf8&0xff000000)<<8));
+        }
+        val = buf8;
     }
 
     switch(buflen) {
     case 1:
-	*((uint8 *) buf) = (uint8) val;
-	break;
+        *((uint8 *) buf) = (uint8) val;
+        break;
     case 2:
-	*((uint16 *) buf) = (uint16) val;
-	break;
+        *((uint16 *) buf) = (uint16) val;
+        break;
     case 4:
-	*((uint32 *) buf) = (uint32) val;
-	break;
+        *((uint32 *) buf) = (uint32) val;
+        break;
     case 8:
-    *((uint64 *) buf) = (uint64) val;
+        *((uint64 *) buf) = (uint64) val;
     }
 
     if(debug) {
@@ -371,36 +371,36 @@ uint32 bread(unsigned len, struct_t *st) {
  *****************************************************************************
  * read some data from file, terminate if unsuccessful
  */
- static void eread(void *buf, unsigned len, unsigned num) {
-     assert(buf != NULL);
-     assert(len==1 || len==2 || len==4 || len==8);
-     assert(num > 0);
-     assert(fp != NULL);
+static void eread(void *buf, unsigned len, unsigned num) {
+    assert(buf != NULL);
+    assert(len==1 || len==2 || len==4 || len==8);
+    assert(num > 0);
+    assert(fp != NULL);
 
-     if(num != fread(buf, len, num, fp)) {
-         if(feof(fp)) {
-             bail(SEMANTIC_ERROR, "unexpected end of file");
-         } else {
-             bail(SYSTEM_ERROR, "error reading file");
-         }
-     }
+    if(num != fread(buf, len, num, fp)) {
+        if(feof(fp)) {
+            bail(SEMANTIC_ERROR, "unexpected end of file");
+        } else {
+            bail(SYSTEM_ERROR, "error reading file");
+        }
+    }
 
-     /*
-      * uint32 word = 0x0A0B0C0D;
-      *     Modern little-endian: 0d 0c 0b 0a
-      *     Modern big-endian: 0a 0b 0c 0d
-      *     PDP-11 (16-bit, little-endian word, big-endian order): 0b 0a 0d 0c
-      *     PDP-11 (16-bit, big-endian word, little-endian order): 0c 0d 0a 0b
-      */
-     if(debug) {
-         int i;
-         printf("eread %u bytes: ", len);
-         for(i=0; i<len; i++) {
-             printf("%02x ", ((unsigned char *) buf)[i]);
-         }
-         printf("\n");
-     }
- }
+    /*
+     * uint32 word = 0x0A0B0C0D;
+     *     Modern little-endian: 0d 0c 0b 0a
+     *     Modern big-endian: 0a 0b 0c 0d
+     *     PDP-11 (16-bit, little-endian word, big-endian order): 0b 0a 0d 0c
+     *     PDP-11 (16-bit, big-endian word, little-endian order): 0c 0d 0a 0b
+     */
+    if(debug) {
+        int i;
+        printf("eread %u bytes: ", len);
+        for(i=0; i<len; i++) {
+            printf("%02x ", ((unsigned char *) buf)[i]);
+        }
+        printf("\n");
+    }
+}
 
 /*****************************************************************************
  * clearfield                                                                *
@@ -411,10 +411,10 @@ static void clearfield(struct_t *st) {
     int32 foo;
 
     if(st!=NULL && st->nbits) {
-	foo = bread(st->nbits, st);
+        foo = bread(st->nbits, st);
 
-	if(foo)
-	    bail(SEMANTIC_ERROR, "unread bitfields in buffer");
+        if(foo)
+            bail(SEMANTIC_ERROR, "unread bitfields in buffer");
 
     }
 }

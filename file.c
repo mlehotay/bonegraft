@@ -116,20 +116,34 @@ unsigned getcount(void) {
 struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     struct_t *st;
 
+    if(debug) {
+        printf("Starting %s struct maxlen=%u",
+               (parent == NULL) ? "unnested" : "nested", maxlen);
+    }
+
     assert(maxlen==1 || maxlen==2 || maxlen==4 || maxlen==8);
     assert(fieldsz==1 || fieldsz==2 || fieldsz==4);
     assert(memberalign==1 || memberalign==2 || memberalign==4 || memberalign==8);
     assert(fieldalign>=0 && fieldalign<=4 && fieldalign!=3);
     assert(structalign==0 || structalign==1 || structalign==2 ||
-            structalign==4 || structalign==8);
+           structalign==4 || structalign==8);
 
     st = alloc(sizeof(struct_t));
 
     /* adjust alignment for fieldsz and memberalign */
-    if(hasfields && fieldsz>maxlen)
+    if(hasfields && fieldsz>maxlen) {
         maxlen = fieldsz;
-    if(memberalign<maxlen)
+        if(debug) {
+            printf(", fieldsz=%u", fieldsz);
+        }
+    }
+
+    if(memberalign<maxlen) {
         maxlen = memberalign;
+        if(debug) {
+            printf(", memberalign=%u", memberalign);
+        }
+    }
 
     /* adjust for structalign and fieldalign */
     /* probably need min and max values here. figure it out later */
@@ -138,9 +152,8 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     } else {
         st->align = (structalign && structalign<maxlen) ? structalign : maxlen;
     }
-
     if(debug) {
-        printf("Start of struct, aligned at %u bytes...\n", st->align);
+        printf(", will align at %u bytes\n", st->align);
     }
 
     assert(st->align==1 || st->align==2 || st->align==4 || st->align==8);
@@ -192,6 +205,9 @@ void align(struct_t *st, unsigned alignment) {
     while((st->nbytes) % alignment) {
         zread(&foo, 1, 1, NULL);
         st->nbytes++;
+        if(debug) {
+            printf("[%02x]", foo);
+        }
         /*
            if(foo)
             bail(SEMANTIC_ERROR, "non-zero struct padding");

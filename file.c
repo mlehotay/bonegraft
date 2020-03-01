@@ -186,7 +186,7 @@ void align(struct_t *st, unsigned alignment) {
     uint8 foo;
 
     assert(st != NULL);
-    assert(alignment==1 || alignment==2 || alignment==4);
+    assert(alignment==1 || alignment==2 || alignment==4 || alignment==8);
 
     while((st->nbytes) % alignment) {
         zread(&foo, 1, 1, NULL);

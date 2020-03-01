@@ -90,7 +90,7 @@ static void usage(void) {
     fprintf(stderr, "  -b      switch byte ordering\n");
     fprintf(stderr, "  -i      use 16-bit ints\n");
     fprintf(stderr, "  -p      use 16-bit pointers\n");
-    fprintf(stderr, "  -l      use 64-bit longs\n");
+    fprintf(stderr, "  -l      use 64-bit longs and pointers\n");
     fprintf(stderr, "  -a <n>  align struct members on n-byte boundaries\n");
     fprintf(stderr, "  -s <n>  pad structs to multiples of n-bytes\n");
     fprintf(stderr, "  -f <n>  padding of structs containing bitfields\n");
@@ -131,6 +131,7 @@ static void parseopts(int argc, char *argv[]) {
             break;
         case 'l':
             longsz = 8;
+            pointersz = 8;
             break;
         case 'a':
             memberalign = readarg(optarg, 'a');
@@ -210,8 +211,8 @@ static int readarg(char *arg, char opt) {
 
     /* check for unexpected values */
     i = atoi(optarg);
-    if(i!=1 && i!=2 && i!=4)
-        bail(USAGE_ERROR, "-%c argument must be 1, 2 or 4", opt);
+    if(i!=1 && i!=2 && i!=4 && i!=8)
+        bail(USAGE_ERROR, "-%c argument must be 1, 2, 4, or 8", opt);
 
     return i;
 }

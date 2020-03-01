@@ -14,7 +14,7 @@
 typedef struct st {
     unsigned nbytes;    /* number of bytes read so far */
     unsigned align;     /* alignment requirement */
-    uint32 fieldbuf;    /* buffer for reading bitfields */
+    uint64 fieldbuf;    /* buffer for reading bitfields */
     unsigned nbits;     /* number of unread bits fieldbuf */
     struct st *parent;  /* enclosing struct, if this is a nested struct */
 } struct_t;
@@ -34,6 +34,6 @@ void endstruct(struct_t *st);
 void align(struct_t *st, unsigned align);
 void zread(void *buf, unsigned len, unsigned num, struct_t *st);
 void iread(void *buf, unsigned buflen, unsigned len, struct_t *st);
-uint32 bread(unsigned len, struct_t *st);
+uint64 bread(unsigned len, struct_t *st);
 
 #endif

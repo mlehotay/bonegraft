@@ -118,9 +118,10 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
 
     assert(maxlen==1 || maxlen==2 || maxlen==4 || maxlen==8);
     assert(fieldsz==1 || fieldsz==2 || fieldsz==4);
-    assert(memberalign==1 || memberalign==2 || memberalign==4);
+    assert(memberalign==1 || memberalign==2 || memberalign==4 || memberalign==8);
     assert(fieldalign>=0 && fieldalign<=4 && fieldalign!=3);
-    assert(structalign>=0 && structalign<=4 && structalign!=3);
+    assert(structalign==0 || structalign==1 || structalign==2 ||
+            structalign==4 || structalign==8);
 
     st = alloc(sizeof(struct_t));
 
@@ -142,7 +143,7 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
         printf("Start of struct, aligned at %u bytes...\n", st->align);
     }
 
-    assert(st->align==1 || st->align==2 || st->align==4);
+    assert(st->align==1 || st->align==2 || st->align==4 || st->align==8);
 
     st->nbytes = st->nbits = 0;
     st->parent = parent;
@@ -211,7 +212,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
     assert(buf != NULL);
     assert(len==1 || len==2 || len==4 || len==8);
     assert(num>0);
-    assert(memberalign==1 || memberalign==2 || memberalign==4);
+    assert(memberalign==1 || memberalign==2 || memberalign==4 || memberalign==8);
 
     /* keep track of struct padding */
     if(st != NULL) {
@@ -256,7 +257,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
 void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
     uint8 buf1;
     uint16 buf2;
-    uint32 buf4;
+    uint64 buf4;
     uint64 buf8, val=0;
 
     assert(buf != NULL);
@@ -303,7 +304,7 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
         *((uint16 *) buf) = (uint16) val;
         break;
     case 4:
-        *((uint32 *) buf) = (uint32) val;
+        *((uint64 *) buf) = (uint64) val;
         break;
     case 8:
         *((uint64 *) buf) = (uint64) val;
@@ -320,8 +321,8 @@ void iread(void *buf, unsigned buflen, unsigned len, struct_t *st) {
  *****************************************************************************
  * read a bitfield from the file
  */
-uint32 bread(unsigned len, struct_t *st) {
-    uint32 mask, val;
+uint64 bread(unsigned len, struct_t *st) {
+    uint64 mask, val;
     unsigned i, spanned = 0;
 
     assert(len > 0);
@@ -351,7 +352,7 @@ uint32 bread(unsigned len, struct_t *st) {
     st->nbits -= len;
 
     if(spanned) {
-        uint32 spanval = bread(spanned, st);
+        uint64 spanval = bread(spanned, st);
         if(fieldMSB)
             val = (val << spanned) | spanval;
         else
@@ -359,7 +360,7 @@ uint32 bread(unsigned len, struct_t *st) {
     }
 
     if(debug) {
-        printf("bread %u bytes: %x\n", len, val);
+        printf("bread %u bytes: %lx\n", len, val);
     }
 
     return val;
@@ -386,7 +387,7 @@ static void eread(void *buf, unsigned len, unsigned num) {
     }
 
     /*
-     * uint32 word = 0x0A0B0C0D;
+     * uint64 word = 0x0A0B0C0D;
      *     Modern little-endian: 0d 0c 0b 0a
      *     Modern big-endian: 0a 0b 0c 0d
      *     PDP-11 (16-bit, little-endian word, big-endian order): 0b 0a 0d 0c
@@ -408,7 +409,7 @@ static void eread(void *buf, unsigned len, unsigned num) {
  * make sure no unread bitfields are in the buffer
  */
 static void clearfield(struct_t *st) {
-    int32 foo;
+    int64 foo;
 
     if(st!=NULL && st->nbits) {
         foo = bread(st->nbits, st);

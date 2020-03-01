@@ -55,7 +55,7 @@ static void readrooms(void);
 static void readtimers(void);
 static void readlights(void);
 static void readmonsters(void);
-static struct monst *readmonster(int32 xl, boolean readobjects);
+static struct monst *readmonster(int64 xl, boolean readobjects);
 static void freemonsters(struct monst *m);
 static void structsizes(void);
 static struct egd *readguard(void);
@@ -354,7 +354,7 @@ static void readfruit(void) {
 
     do { /* keep reading structs until we find the sentinel with fid=0 */
         struct_t *st;
-        uint32 grot;
+        uint64 grot;
 
         /* allocate a struct fruit and add it to the fruit chain */
         f = alloc(sizeof(struct fruit));
@@ -570,7 +570,7 @@ static void readdoors(void) {
 static struct mkroom *readroom(void) {
     struct_t *st;
     struct mkroom *r;
-    uint32 grot;
+    uint64 grot;
     int i;
 
     r = alloc(sizeof(struct mkroom));
@@ -650,7 +650,7 @@ static void readrooms(void) {
 static void readtimers(void) {
     timer_element *te, *tail=NULL;
     struct_t *st;
-    uint32 grot;
+    uint64 grot;
     int i;
 
     iread(&bones.ntimers, sizeof(bones.ntimers), intsz, NULL);
@@ -686,7 +686,7 @@ static void readtimers(void) {
 static void readlights(void) {
     light_source *ls, *tail=NULL;
     struct_t *st;
-    uint32 grot;
+    uint64 grot;
     int i;
 
     iread(&bones.nlights, sizeof(bones.nlights), intsz, NULL);
@@ -720,9 +720,9 @@ static void readlights(void) {
  */
 static void readmonsters(void) {
     struct monst *m, *tail=NULL;
-    int32 xl=0; /* number of extra bytes after struct monst */
+    int64 xl=0; /* number of extra bytes after struct monst */
 
-    /* monbegin is a pointer, read it as an uint32 in case pointers have only
+    /* monbegin is a pointer, read it as an uint64 in case pointers have only
      * 16 bits on this machine. for each monster in the chain we have to
      * calculate m->data's offset from monbegin, which requires calculating
      * sizeof(struct permonst) from the bones data. */
@@ -749,11 +749,11 @@ static void readmonsters(void) {
  *****************************************************************************
  * read a struct monst from file
  */
-static struct monst *readmonster(int32 xl, boolean readinv) {
+static struct monst *readmonster(int64 xl, boolean readinv) {
     struct monst *m;
     struct_t *st;
     boolean hasinventory = FALSE, hasweapon = FALSE;
-    uint32 grot;
+    uint64 grot;
     int i;
 
     m = alloc(sizeof(struct monst));
@@ -1069,7 +1069,7 @@ static struct epri *readpriest(void) {
 static struct eshk *readshopkeeper(void) {
     struct eshk *eshk;
     struct_t *st, *st2;
-    int32 grot;
+    int64 grot;
     int i;
 
     eshk = alloc(sizeof(struct eshk));
@@ -1169,12 +1169,12 @@ static struct edog *readdog(void) {
  */
 static struct obj *readobjects(boolean counting) {
     struct obj *obj, *head=NULL, *tail=NULL;
-    int32 xl=0; /* number of extra bytes after struct obj */
+    int64 xl=0; /* number of extra bytes after struct obj */
 
     while(xl>=0) { /* non-constant expression to please lint */
         struct_t *st;
         boolean hascontents = FALSE;
-        uint32 grot;
+        uint64 grot;
 
         iread(&xl, sizeof(xl), intsz, NULL);
         if(xl == -1)
@@ -1364,7 +1364,7 @@ static void readworms(void) {
 static void readtraps(void) {
     struct trap *t, *tail=NULL;
     struct_t *st;
-    uint32 grot;
+    uint64 grot;
 
     do { /* read traps until a we find struct filled with zeros */
         t = alloc(sizeof(struct trap));
@@ -1410,7 +1410,7 @@ static void readtraps(void) {
 static void readengravings(void) {
     struct engr *e, *tail=NULL;
     struct_t *st;
-    uint32 grot, len=0;
+    uint64 grot, len=0;
 
     while(len>=0) { /* non-constant expression to please lint */
         iread(&len, sizeof(len), intsz, NULL);
@@ -1458,7 +1458,7 @@ static void readengravings(void) {
 static void readdamage(void) {
     struct damage *d, *tail=NULL;
     struct_t *st;
-    uint32 n, grot;
+    uint64 n, grot;
 
     iread(&n, sizeof(n), intsz, NULL);
     while(n--) {
@@ -1490,7 +1490,7 @@ static void readdamage(void) {
  */
 static void readregions(void) {
     struct_t *st;
-    uint32 n;
+    uint64 n;
     int i, j;
 
     iread(&bones.moves, sizeof(bones.moves), longsz, NULL);
@@ -1556,10 +1556,10 @@ static void readregions(void) {
 
         iread(&bones.regions[i]->n_monst, sizeof(bones.regions[i]->n_monst),SHORTSZ,NULL);
         if(bones.regions[i]->n_monst)
-            bones.regions[i]->monsters = alloc(sizeof(uint32 *) * bones.regions[i]->n_monst);
+            bones.regions[i]->monsters = alloc(sizeof(uint64 *) * bones.regions[i]->n_monst);
 
         for(j=0; j<bones.regions[i]->n_monst; j++) {
-            iread(&bones.regions[i]->monsters[j], sizeof(uint32), intsz, NULL);
+            iread(&bones.regions[i]->monsters[j], sizeof(uint64), intsz, NULL);
         }
         bones.regions[i]->max_monst = bones.regions[i]->n_monst;
 

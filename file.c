@@ -122,9 +122,10 @@ struct_t *startstruct(struct_t *parent, boolean hasfields, unsigned maxlen) {
     }
 
     assert(maxlen==1 || maxlen==2 || maxlen==4 || maxlen==8);
-    assert(fieldsz==1 || fieldsz==2 || fieldsz==4);
+    assert(fieldsz==1 || fieldsz==2 || fieldsz==4 || fieldsz==8);
     assert(memberalign==1 || memberalign==2 || memberalign==4 || memberalign==8);
-    assert(fieldalign>=0 && fieldalign<=4 && fieldalign!=3);
+    assert(fieldalign==0 || fieldalign==1 || fieldalign==2 ||
+           fieldalign==4 || fieldalign==8);
     assert(structalign==0 || structalign==1 || structalign==2 ||
            structalign==4 || structalign==8);
 
@@ -197,21 +198,29 @@ void endstruct(struct_t *st) {
  * read some bytes from the file to align struct properly
  */
 void align(struct_t *st, unsigned alignment) {
-    uint8 foo;
+    uint8 offset, buf;
 
     assert(st != NULL);
     assert(alignment==1 || alignment==2 || alignment==4 || alignment==8);
 
+    offset = (st->nbytes) % alignment;
+    if(debug && offset) {
+        printf("aligning struct... ");
+    }
+
     while((st->nbytes) % alignment) {
-        zread(&foo, 1, 1, NULL);
+        zread(&buf, 1, 1, NULL);
         st->nbytes++;
         if(debug) {
-            printf("[%02x]", foo);
+            printf("%02x ", buf);
         }
         /*
            if(foo)
             bail(SEMANTIC_ERROR, "non-zero struct padding");
          */
+    }
+    if(debug && offset) {
+        printf("\n");
     }
 }
 
@@ -238,7 +247,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
     }
 
     if(debug) {
-        printf("zread %u x %u bytes...\n", num, len);
+        /* printf("zread %u x %u bytes... ", num, len); */
     }
 
     /* read num items of len bytes */
@@ -261,6 +270,9 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
             eread(buf, len, 1);
 
         buf = (char *) buf + len; /* advance buf pointer to read next item */
+    }
+    if(debug) {
+        /* printf("\n"); */
     }
 }
 

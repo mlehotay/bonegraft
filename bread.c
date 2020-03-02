@@ -946,6 +946,10 @@ static void structsizes(void) {
     coord c;
     void *p;
 
+    if(debug) {
+        printf("structsizes()\n");
+    }
+
     /* sanity check for union in struct trap */
     startcount();
     readcoord(NULL, &c);
@@ -984,15 +988,23 @@ static void structsizes(void) {
     if(bones.header.incarnation >= 0x03020100) {
         unsigned objsz;
 
-        if(monstsz != bones.monstsz)
+        if(monstsz != bones.monstsz) {
+            if(debug) {
+                printf("monstsz %u != %u\n", monstsz, bones.monstsz);
+            }
             bail(SEMANTIC_ERROR, "struct monst is wrong size");
+        }
 
         startcount();
         p = readobjects(TRUE);
         objsz = getcount();
         freeobjects(p);
-        if(objsz != bones.objsz)
+        if(objsz != bones.objsz) {
+            if(debug) {
+                printf("objsz %u != %u\n", objsz, bones.objsz);
+            }
             bail(SEMANTIC_ERROR, "struct obj is wrong size");
+        }
     }
 }
 

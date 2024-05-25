@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <time.h>
 #include <ctype.h>
 #include <assert.h>
 #include "getopt.h"
@@ -25,11 +24,17 @@ static int readarg(char *arg, char opt);
 *****************************************************************************/
 int main(int argc, char *argv[]) {
     parseopts(argc, argv);
-    readbones(argv[argc-1]);
+
     if(!quiet) {
         printf("Bone Graft v0.01\n");
+    }
+
+    readbones(argv[argc-1]);
+
+    if(!quiet) {
         printbones();
     }
+
     freebones();
     return 0;
 }
@@ -54,24 +59,20 @@ void *alloc(unsigned len) {
 * bail                                                                      *
 *****************************************************************************/
 void bail(int status, char *message, ... ) {
-    const char *exclaim[] = { "Ack! Pfft!", "Bah!", "Whoops!", "Argh!",
-                              "Uh oh!", "Double plus ungood!", "Grrr!", "D'oh!", "Gah!" };
 
     if(!quiet) {
         if(message == NULL)
-            fprintf(stderr, "Ahh! The bugs! Get them off!\n");
+            fprintf(stderr, "Unexpected error. Bailing.\n");
         else {
             va_list args;
 
             assert(*message != '\0');
             assert(*message != '%'); /* don't mess with printf specifiers */
-            srand(time(NULL));
 
             va_start(args, message);
-            fprintf(stderr, "%s %c", exclaim[rand() % (sizeof(exclaim) /
-                                                       sizeof(exclaim[0]))], toupper(*(message++)));
+            fprintf(stderr, "ERROR: %c", toupper(*(message++)));
             vfprintf(stderr, message, args);
-            fprintf(stderr, "!\n");
+            fprintf(stderr, "\n");
             va_end(args);
         }
     }

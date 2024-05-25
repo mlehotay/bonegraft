@@ -74,10 +74,10 @@ void testeof(void) {
 
     assert(fp != NULL);
     if(fread(&c, 1, 1, fp) || !feof(fp))
-        bail(SEMANTIC_ERROR, "extra junk at end of file");
+        bail(SEMANTIC_ERROR, "File extends past expected EOF");
 
     if(nzeroes)
-        bail(SEMANTIC_ERROR, "file ends in middle of zerocomp run");
+        bail(SEMANTIC_ERROR, "Unexpected EOF in zerocomp run");
 }
 
 
@@ -247,7 +247,7 @@ void zread(void *buf, unsigned len, unsigned num, struct_t *st) {
     }
 
     if(debug) {
-        /* printf("zread %u x %u bytes... ", num, len); */
+        printf("zread %u x %u bytes... ", num, len);
     }
 
     /* read num items of len bytes */

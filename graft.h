@@ -6,7 +6,7 @@
 #define GRAFT_H
 
 /* most recent version of NetHack we know about */
-#define LATEST_VERSION 0x03070013
+#define LATEST_VERSION 0x03070013 /* todo: update to 3.7.0-102, need to check representation */
 
 /* exit codes */
 #define SYSTEM_ERROR   1
